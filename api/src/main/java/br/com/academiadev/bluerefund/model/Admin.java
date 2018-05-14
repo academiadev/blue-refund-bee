@@ -9,9 +9,6 @@ public class Admin extends Pessoa {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * É essencial sempre termos um construtor vazio pro JPA utilizar ;)
-	 */
 	public Admin() {
 
 	}

@@ -6,9 +6,12 @@ public class Empresa {
 	private String nome;
 	private Integer codigo;
 	
-	public Empresa(Long id, String nome) {
+	public Empresa() {
+
+	}
+	
+	public Empresa(String nome) {
 		super();
-		this.id = id;
 		this.nome = nome;
 		this.codigo = nome.hashCode();
 	}

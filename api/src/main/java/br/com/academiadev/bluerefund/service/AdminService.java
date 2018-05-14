@@ -21,7 +21,7 @@ public class AdminService {
 		//Buscar se já existe esta empresa, se não existe, cadastra-la
 		//Verificar se a senha tem 8 caracteres com caracteres especiais e numeros
 		
-		Empresa empresa = new Empresa(1l, nomeEmpresa);
+		Empresa empresa = new Empresa(nomeEmpresa);
 		Admin admin = new Admin(nome, email, senha, empresa);
 		
 		adminRepository.save(admin);

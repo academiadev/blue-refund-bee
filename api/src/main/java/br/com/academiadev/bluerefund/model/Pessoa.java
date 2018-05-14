@@ -32,11 +32,8 @@ public class Pessoa implements Serializable {
 	@Column
 	private Integer hashSenha;
 
-	private transient Empresa empresa;
+	private transient Empresa empresa; // Utilizar transient enquanto não utilizar @onetomany etc..
 
-	/**
-	 * Sempre deixar um construtor vazio pras classes Modelo
-	 */
 	public Pessoa() {
 		super();
 	}
