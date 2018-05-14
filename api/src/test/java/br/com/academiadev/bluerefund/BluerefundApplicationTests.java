@@ -1,6 +1,7 @@
 package br.com.academiadev.bluerefund;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,12 +38,16 @@ public class BluerefundApplicationTests {
 
 	@Test
 	public void addAdmin() {
-		adminRepository.save(new Admin("admin1", "admin1@gmail.com", "senha1", new Empresa("asdasd")));
+		Empresa empresa = new Empresa("empresa");
+		empresaRepository.save(empresa);
+		adminRepository.save(new Admin("admin1", "admin1@gmail.com", "senha1", empresa));
 	}
 	
 	@Test
 	public void addEmpregado() {
-		empregadoRepository.save(new Empregado("empregado1", "empregado1@gmail.com", "senha1", new Empresa("asdasd")));
+		Empresa empresa = new Empresa("empresa2");
+		empresaRepository.save(empresa);
+		empregadoRepository.save(new Empregado("empregado1", "empregado1@gmail.com", "senha1", empresa));
 	}
 	
 	@Test
@@ -57,7 +62,7 @@ public class BluerefundApplicationTests {
 	
 	@Test
 	public void addReembolso() {
-		reembolsoRepository.save(new Reembolso("reembolso1", new Categoria(), new BigDecimal(123), new Empregado()));
+		reembolsoRepository.save(new Reembolso("reembolso1", new Categoria(), new BigDecimal(123), new Empregado(), LocalDate.now() ));
 	}
 	
 }

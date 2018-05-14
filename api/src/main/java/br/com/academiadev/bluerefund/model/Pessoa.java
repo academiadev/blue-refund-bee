@@ -3,9 +3,12 @@ package br.com.academiadev.bluerefund.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -32,7 +35,9 @@ public class Pessoa implements Serializable {
 	@Column
 	private Integer hashSenha;
 
-	private transient Empresa empresa; // Utilizar transient enquanto não utilizar @onetomany etc..
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_empresa", nullable = false)
+	private Empresa empresa; 
 
 	public Pessoa() {
 		super();

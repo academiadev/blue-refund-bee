@@ -7,9 +7,6 @@ import javax.persistence.Table;
 @Table(name="empregado")
 public class Empregado extends Pessoa {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	public Empregado() {

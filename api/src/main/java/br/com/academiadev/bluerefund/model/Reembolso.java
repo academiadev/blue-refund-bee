@@ -1,6 +1,7 @@
 package br.com.academiadev.bluerefund.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,8 @@ public class Reembolso {
 	private Long id;
 	@Column
 	private String nome;
+	@Column
+	private LocalDate data;
 	private transient Categoria categoria;
 	@Column
 	private StatusReembolso status;
@@ -35,7 +38,7 @@ public class Reembolso {
 	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
-			 Upload upload, Empregado empregado) {
+			 Upload upload, Empregado empregado, LocalDate data) {
 		super();
 		this.nome = nome;
 		this.categoria = categoria;
@@ -44,10 +47,11 @@ public class Reembolso {
 		this.valorReembolsado = new BigDecimal(0);
 		this.upload = upload;
 		this.empregado = empregado;
+		this.data = data;
 	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
-			  Empregado empregado) {
+			  Empregado empregado, LocalDate data) {
 		super();
 		this.nome = nome;
 		this.categoria = categoria;
@@ -56,8 +60,19 @@ public class Reembolso {
 		this.valorReembolsado = new BigDecimal(0);
 		this.upload = null;
 		this.empregado = empregado;
+		this.data = data;
 	}
 	
+	
+	
+	public LocalDate getData() {
+		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+
 	public Long getId() {
 		return id;
 	}
