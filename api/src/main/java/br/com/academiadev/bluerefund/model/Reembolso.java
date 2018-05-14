@@ -2,16 +2,37 @@ package br.com.academiadev.bluerefund.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="reembolso")
 public class Reembolso {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
 	private Long id;
+	@Column
 	private String nome;
-	private Categoria categoria;
+	private transient Categoria categoria;
+	@Column
 	private StatusReembolso status;
+	@Column
 	private BigDecimal valorSolicitado;
+	@Column
 	private BigDecimal valorReembolsado;
-	private Upload upload;
-	private Empregado empregado;
+	private transient Upload upload;
+	private transient Empregado empregado;
+	
+	public Reembolso() {
+
+	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
 			 Upload upload, Empregado empregado) {

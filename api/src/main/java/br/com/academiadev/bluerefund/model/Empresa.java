@@ -1,9 +1,23 @@
 package br.com.academiadev.bluerefund.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="empresa")
 public class Empresa {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
 	private Long id;
+	@Column
 	private String nome;
+	@Column
 	private Integer codigo;
 	
 	public Empresa() {
