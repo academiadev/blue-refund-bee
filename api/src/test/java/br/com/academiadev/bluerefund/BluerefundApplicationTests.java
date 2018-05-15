@@ -19,6 +19,7 @@ import br.com.academiadev.bluerefund.repository.CategoriaRepository;
 import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
+import br.com.academiadev.bluerefund.service.EmpresaService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -69,6 +70,11 @@ public class BluerefundApplicationTests {
 		Categoria categoria = new Categoria("categoria1");
 		categoriaRepository.save(categoria);
 		reembolsoRepository.save(new Reembolso("reembolso1", categoria , new BigDecimal(123), empregado, LocalDate.now() ));
+	}
+	
+	@Test
+	public void addEmpresaService() {
+		new EmpresaService().cadastrar("empresa1");
 	}
 	
 }
