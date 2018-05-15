@@ -5,9 +5,12 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -23,7 +26,10 @@ public class Reembolso {
 	private String nome;
 	@Column
 	private LocalDate data;
-	private transient Categoria categoria;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nome_categoria", nullable = false)
+	private Categoria categoria;
 	@Column
 	private StatusReembolso status;
 	@Column
@@ -31,7 +37,10 @@ public class Reembolso {
 	@Column
 	private BigDecimal valorReembolsado;
 	private transient Upload upload;
-	private transient Empregado empregado;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_empregado", nullable = false)
+	private Empregado empregado;
 	
 	public Reembolso() {
 

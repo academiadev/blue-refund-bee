@@ -62,7 +62,13 @@ public class BluerefundApplicationTests {
 	
 	@Test
 	public void addReembolso() {
-		reembolsoRepository.save(new Reembolso("reembolso1", new Categoria(), new BigDecimal(123), new Empregado(), LocalDate.now() ));
+		Empresa empresa = new Empresa("empresa2");
+		empresaRepository.save(empresa);
+		Empregado empregado = new Empregado("empregado1", "empregado1@gmail.com", "senha1", empresa);
+		empregadoRepository.save(empregado);
+		Categoria categoria = new Categoria("categoria1");
+		categoriaRepository.save(categoria);
+		reembolsoRepository.save(new Reembolso("reembolso1", categoria , new BigDecimal(123), empregado, LocalDate.now() ));
 	}
 	
 }
