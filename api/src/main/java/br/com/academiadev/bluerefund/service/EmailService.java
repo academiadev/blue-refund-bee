@@ -3,6 +3,7 @@ package br.com.academiadev.bluerefund.service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class EmailService {
 	
 	public boolean validarEmail(String email)

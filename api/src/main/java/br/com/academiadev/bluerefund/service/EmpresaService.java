@@ -2,16 +2,12 @@ package br.com.academiadev.bluerefund.service;
 
 import java.util.List;
 
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 
-@Primary
 @Service
 public class EmpresaService implements EmpresaInterface {
 	

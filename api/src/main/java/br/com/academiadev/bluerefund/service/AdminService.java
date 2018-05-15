@@ -1,11 +1,13 @@
 package br.com.academiadev.bluerefund.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.repository.AdminRepository;
 
+@Service
 public class AdminService {
 	
 	@Autowired
