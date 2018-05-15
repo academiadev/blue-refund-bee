@@ -3,7 +3,6 @@ package br.com.academiadev.bluerefund.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
@@ -17,7 +16,7 @@ public class EmpresaService implements EmpresaInterface {
 	public void cadastrar(String nome) {
 		Empresa empresa = new Empresa(nome);
 		
-		verificaCodigo(empresa);
+		//verificaCodigo(empresa);
 		
 		this.empresaRepository.save(empresa);
 	}

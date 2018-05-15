@@ -8,5 +8,6 @@ public class BluerefundApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BluerefundApplication.class, args);
+		
 	}
 }
