@@ -19,7 +19,7 @@ public class Empresa {
 	private String nome;
 	@Column
 	private Integer codigo;
-	
+		
 	public Empresa() {
 
 	}
@@ -27,7 +27,8 @@ public class Empresa {
 	public Empresa(String nome) {
 		super();
 		this.nome = nome;
-		this.codigo = nome.hashCode();
+		String cod = nome + Math.random();
+		this.codigo = cod.hashCode();
 	}
 	public Long getId() {
 		return id;
@@ -46,6 +47,11 @@ public class Empresa {
 	}
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
+	}
+	
+	public void setNovoCodigo() {
+		String cod = this.nome + Math.random();
+		this.codigo = cod.hashCode();
 	}
 	
 

@@ -52,7 +52,7 @@ public class BluerefundApplicationTests {
 	
 	@Test
 	public void addEmpresa() {
-		empresaRepository.save(new Empresa("empresa1"));
+		empresaRepository.save(new Empresa("empresa2"));
 	}
 
 	@Test
