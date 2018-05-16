@@ -13,12 +13,13 @@ public class EmpresaService implements EmpresaInterface {
 	@Autowired
 	private EmpresaRepository empresaRepository;
 	
-	public void cadastrar(String nome) {
+	public Empresa cadastrar(String nome) {
 		Empresa empresa = new Empresa(nome);
 		
-		//verificaCodigo(empresa);
+		verificaCodigo(empresa);
 		
 		this.empresaRepository.save(empresa);
+		return empresa;
 	}
 
 	private void verificaCodigo(Empresa empresa) {

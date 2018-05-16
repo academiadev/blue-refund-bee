@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.academiadev.bluerefund.exeptions.EmailInvalidoExeption;
+import br.com.academiadev.bluerefund.exeptions.EmailJaCadastradoExeption;
+import br.com.academiadev.bluerefund.exeptions.SenhaInvalidaExeption;
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Categoria;
 import br.com.academiadev.bluerefund.model.Empregado;
@@ -19,6 +22,7 @@ import br.com.academiadev.bluerefund.repository.CategoriaRepository;
 import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
+import br.com.academiadev.bluerefund.service.AdminService;
 import br.com.academiadev.bluerefund.service.EmpresaService;
 
 @RunWith(SpringRunner.class)
@@ -36,6 +40,10 @@ public class BluerefundApplicationTests {
 	@Autowired
 	private ReembolsoRepository reembolsoRepository;
 	
+	@Autowired
+	private EmpresaService empresaService;
+	@Autowired
+	private AdminService adminService;
 
 	@Test
 	public void addAdmin() {
@@ -74,7 +82,12 @@ public class BluerefundApplicationTests {
 	
 	@Test
 	public void addEmpresaService() {
-		new EmpresaService().cadastrar("empresa1");
+		empresaService.cadastrar("empresa1");
+	}
+	
+	@Test
+	public void addAdminService() throws SenhaInvalidaExeption, EmailInvalidoExeption, EmailJaCadastradoExeption {
+		adminService.cadastrar("Admin1", "emailDoAdmin1@gmail.com", "asdf_123", "contaazul");
 	}
 	
 }

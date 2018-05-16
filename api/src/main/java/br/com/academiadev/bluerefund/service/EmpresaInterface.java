@@ -1,7 +1,9 @@
 package br.com.academiadev.bluerefund.service;
 
+import br.com.academiadev.bluerefund.model.Empresa;
+
 public interface EmpresaInterface {
 
-	public void cadastrar(String nome);
+	public Empresa cadastrar(String nome);
 	
 }

@@ -3,41 +3,52 @@ package br.com.academiadev.bluerefund.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.exeptions.EmailInvalidoExeption;
 import br.com.academiadev.bluerefund.exeptions.EmailJaCadastradoExeption;
+import br.com.academiadev.bluerefund.exeptions.EmpresaNaoEncontradaExeption;
 import br.com.academiadev.bluerefund.exeptions.SenhaInvalidaExeption;
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.repository.AdminRepository;
 import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
+import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 
-@Service
-public class AdminService {
+public class EmpregadoService {
 	
-	@Autowired
-	private AdminRepository adminRepository;
 	@Autowired
 	private EmpregadoRepository empregadoRepository;
 	@Autowired
-	private EmpresaService empresaService;
+	private AdminRepository adminRepository;
+	@Autowired
+	private EmpresaRepository empresaRepository;
 	
-	public void cadastrar(String nome, String email, String senha, String nomeEmpresa) 
-			throws SenhaInvalidaExeption, EmailInvalidoExeption, EmailJaCadastradoExeption{
+	public void cadastrar(String nome, String email, String senha, Integer codigo) 
+			throws SenhaInvalidaExeption, EmailInvalidoExeption, EmailJaCadastradoExeption, EmpresaNaoEncontradaExeption{
 		
-		validacoesCadastrar(email, senha);
+		Empresa empresa = buscaEmpresaPorCodigo(codigo);
+		
+		validacoesCadastrar(email, senha, empresa);
 		
 		
-		Empresa empresa = empresaService.cadastrar(nomeEmpresa);
 		Admin admin = new Admin(nome, email, senha, empresa);
 		
 		adminRepository.save(admin);
 	}
-
-	private void validacoesCadastrar(String email, String senha)
-			throws EmailInvalidoExeption, EmailJaCadastradoExeption, SenhaInvalidaExeption {
+	
+	private Empresa buscaEmpresaPorCodigo(Integer codigo) {
+		List<Empresa> empresas = empresaRepository.findAll();
+		for (Empresa empresa : empresas) {
+			if(empresa.getCodigo().equals(codigo))
+				return empresa;
+		}
+		return null;
+	}
+	
+	
+	private void validacoesCadastrar(String email, String senha, Empresa empresa)
+			throws EmailInvalidoExeption, EmailJaCadastradoExeption, SenhaInvalidaExeption, EmpresaNaoEncontradaExeption {
 		boolean validaEmail = new EmailService().validarEmail(email);
 		
 		boolean emailJaCadastrado = verificaEmailCadastrado(email);
@@ -52,6 +63,11 @@ public class AdminService {
 		
 		if(!validaSenha) 
 			throw new SenhaInvalidaExeption();
+		
+		if(empresa == null) {
+			throw new EmpresaNaoEncontradaExeption();
+		}
+	
 	}
 	
 	private boolean validaSenha(String senha) {
@@ -87,6 +103,5 @@ public class AdminService {
 		}
 		return false;
 	}
-	
 
 }
