@@ -90,4 +90,15 @@ public class BluerefundApplicationTests {
 		adminService.cadastrar("Admin1", "emailDoAdmin1@gmail.com", "asdf_123", "contaazul");
 	}
 	
+	@Test
+	public void buscaEmpregadoEmail() {
+		Admin admin = adminRepository.findByEmail("admin1@gmail.com");
+		System.out.println(admin.getEmail());
+		System.out.println(admin.getEmail());
+		System.out.println(admin.getEmail());
+		System.out.println(admin.getEmail());
+		System.out.println(admin.getEmail());
+
+	}
+	
 }

@@ -36,10 +36,11 @@ public class Reembolso {
 	private BigDecimal valorSolicitado;
 	@Column
 	private BigDecimal valorReembolsado;
-	private transient Upload upload;
+	@Column
+	private String urlUpload;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_empregado", nullable = false)
+	@JoinColumn(name = "empregado", nullable = false)
 	private Empregado empregado;
 	
 	public Reembolso() {
@@ -47,14 +48,14 @@ public class Reembolso {
 	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
-			 Upload upload, Empregado empregado, LocalDate data) {
+			 String urlUpload, Empregado empregado, LocalDate data) {
 		super();
 		this.nome = nome;
 		this.categoria = categoria;
 		this.status = StatusReembolso.AGUARDANDO;
 		this.valorSolicitado = valorSolicitado;
 		this.valorReembolsado = new BigDecimal(0);
-		this.upload = upload;
+		this.urlUpload = urlUpload;
 		this.empregado = empregado;
 		this.data = data;
 	}
@@ -67,7 +68,7 @@ public class Reembolso {
 		this.status = StatusReembolso.AGUARDANDO;
 		this.valorSolicitado = valorSolicitado;
 		this.valorReembolsado = new BigDecimal(0);
-		this.upload = null;
+		this.urlUpload = null;
 		this.empregado = empregado;
 		this.data = data;
 	}
@@ -118,12 +119,15 @@ public class Reembolso {
 	public void setValorReembolsado(BigDecimal valorReembolsado) {
 		this.valorReembolsado = valorReembolsado;
 	}
-	public Upload getUpload() {
-		return upload;
+	
+	public String getUrlUpload() {
+		return urlUpload;
 	}
-	public void setUpload(Upload upload) {
-		this.upload = upload;
+
+	public void setUrlUpload(String urlUpload) {
+		this.urlUpload = urlUpload;
 	}
+
 	public Empregado getEmpregado() {
 		return empregado;
 	}

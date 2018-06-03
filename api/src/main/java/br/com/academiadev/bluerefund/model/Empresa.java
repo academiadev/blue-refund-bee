@@ -1,10 +1,13 @@
 package br.com.academiadev.bluerefund.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +22,12 @@ public class Empresa {
 	private String nome;
 	@Column
 	private Integer codigo;
+	
+	@OneToMany(mappedBy = "empresa")
+	private List<Admin> admins;
+	
+	@OneToMany(mappedBy = "empresa")
+	private List<Empregado> empregados;
 		
 	public Empresa() {
 
@@ -52,6 +61,22 @@ public class Empresa {
 	public void setNovoCodigo() {
 		String cod = this.nome + Math.random();
 		this.codigo = cod.hashCode();
+	}
+
+	public List<Admin> getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(List<Admin> admins) {
+		this.admins = admins;
+	}
+
+	public List<Empregado> getEmpregados() {
+		return empregados;
+	}
+
+	public void setEmpregados(List<Empregado> empregados) {
+		this.empregados = empregados;
 	}
 	
 
