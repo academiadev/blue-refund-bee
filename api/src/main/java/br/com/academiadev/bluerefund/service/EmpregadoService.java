@@ -3,6 +3,7 @@ package br.com.academiadev.bluerefund.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.exeptions.EmailInvalidoExeption;
 import br.com.academiadev.bluerefund.exeptions.EmailJaCadastradoExeption;
@@ -15,6 +16,7 @@ import br.com.academiadev.bluerefund.repository.AdminRepository;
 import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 
+@Service
 public class EmpregadoService {
 	
 	@Autowired
@@ -32,9 +34,12 @@ public class EmpregadoService {
 		validacoesCadastrar(email, senha, empresa);
 		
 		
-		Admin admin = new Admin(nome, email, senha, empresa);
+//		Admin admin = new Admin(nome, email, senha, empresa);
 		
-		adminRepository.save(admin);
+//		adminRepository.save(admin);
+		
+		Empregado empregado = new Empregado(nome, email, senha, empresa);
+		empregadoRepository.save(empregado);
 	}
 	
 	private Empresa buscaEmpresaPorCodigo(Integer codigo) {
