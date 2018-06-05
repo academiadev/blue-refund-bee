@@ -1,34 +1,34 @@
-package br.com.academiadev.bluerefund.exeptions;
+package br.com.academiadev.bluerefund.exceptions;
 
-public class EmailInvalidoExeption extends Exception {
+public class EmailInvalidoException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public EmailInvalidoExeption() {
+	public EmailInvalidoException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailInvalidoExeption(String message, Throwable cause, boolean enableSuppression,
+	public EmailInvalidoException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailInvalidoExeption(String message, Throwable cause) {
+	public EmailInvalidoException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailInvalidoExeption(String message) {
+	public EmailInvalidoException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailInvalidoExeption(Throwable cause) {
+	public EmailInvalidoException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

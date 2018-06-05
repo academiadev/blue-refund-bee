@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.academiadev.bluerefund.exeptions.EmailInvalidoExeption;
-import br.com.academiadev.bluerefund.exeptions.EmailJaCadastradoExeption;
-import br.com.academiadev.bluerefund.exeptions.SenhaInvalidaExeption;
+import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
+import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
+import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
@@ -25,7 +25,7 @@ public class AdminService {
 	private EmpresaService empresaService;
 	
 	public void cadastrar(String nome, String email, String senha, String nomeEmpresa) 
-			throws SenhaInvalidaExeption, EmailInvalidoExeption, EmailJaCadastradoExeption{
+			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException{
 		
 		validacoesCadastrar(email, senha);
 		
@@ -37,7 +37,7 @@ public class AdminService {
 	}
 
 	private void validacoesCadastrar(String email, String senha)
-			throws EmailInvalidoExeption, EmailJaCadastradoExeption, SenhaInvalidaExeption {
+			throws EmailInvalidoException, EmailJaCadastradoException, SenhaInvalidaException {
 		boolean validaEmail = new EmailService().validarEmail(email);
 		
 		boolean emailJaCadastrado = verificaEmailCadastrado(email);
@@ -45,13 +45,13 @@ public class AdminService {
 		boolean validaSenha = validaSenha(senha);
 		
 		if(!validaEmail)
-			throw new EmailInvalidoExeption();
+			throw new EmailInvalidoException();
 		
 		if(emailJaCadastrado)
-			throw new EmailJaCadastradoExeption();
+			throw new EmailJaCadastradoException();
 		
 		if(!validaSenha) 
-			throw new SenhaInvalidaExeption();
+			throw new SenhaInvalidaException();
 	}
 	
 	private boolean validaSenha(String senha) {

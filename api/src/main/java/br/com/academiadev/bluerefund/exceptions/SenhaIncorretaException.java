@@ -1,37 +1,36 @@
-package br.com.academiadev.bluerefund.exeptions;
+package br.com.academiadev.bluerefund.exceptions;
 
-public class EmailJaCadastradoExeption extends Exception {
+public class SenhaIncorretaException extends Exception{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public EmailJaCadastradoExeption() {
+	public SenhaIncorretaException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailJaCadastradoExeption(String message, Throwable cause, boolean enableSuppression,
+	public SenhaIncorretaException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailJaCadastradoExeption(String message, Throwable cause) {
+	public SenhaIncorretaException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailJaCadastradoExeption(String message) {
+	public SenhaIncorretaException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailJaCadastradoExeption(Throwable cause) {
+	public SenhaIncorretaException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	
 }

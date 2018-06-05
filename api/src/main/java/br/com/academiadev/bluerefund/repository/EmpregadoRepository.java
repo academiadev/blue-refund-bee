@@ -8,5 +8,6 @@ import br.com.academiadev.bluerefund.model.Empregado;
 
 @Repository
 public interface EmpregadoRepository extends JpaRepository<Empregado, Long> {
-
+	
+	public Empregado findByEmail(String email);
 }

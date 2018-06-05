@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.academiadev.bluerefund.exeptions.EmailInvalidoExeption;
-import br.com.academiadev.bluerefund.exeptions.EmailJaCadastradoExeption;
-import br.com.academiadev.bluerefund.exeptions.SenhaInvalidaExeption;
+import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
+import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
+import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
+import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
+import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Categoria;
 import br.com.academiadev.bluerefund.model.Empregado;
@@ -23,6 +26,7 @@ import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
 import br.com.academiadev.bluerefund.service.AdminService;
+import br.com.academiadev.bluerefund.service.EmpregadoService;
 import br.com.academiadev.bluerefund.service.EmpresaService;
 
 @RunWith(SpringRunner.class)
@@ -44,6 +48,9 @@ public class BluerefundApplicationTests {
 	private EmpresaService empresaService;
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private EmpregadoService empregadoService;
+	
 
 	@Test
 	public void addAdmin() {
@@ -86,7 +93,7 @@ public class BluerefundApplicationTests {
 	}
 	
 	@Test
-	public void addAdminService() throws SenhaInvalidaExeption, EmailInvalidoExeption, EmailJaCadastradoExeption {
+	public void addAdminService() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException {
 		adminService.cadastrar("Admin1", "emailDoAdmin1@gmail.com", "asdf_123", "contaazul");
 	}
 	
@@ -100,5 +107,12 @@ public class BluerefundApplicationTests {
 		System.out.println(admin.getEmail());
 
 	}
+	
+	@Test
+	public void novaSenha() throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException {
+		System.out.println(empregadoService.novaSenha("Gaki_988", "Gaki_988", "empregado1@gmail.com"));
+//		Gaki_988
+	}
+	
 	
 }
