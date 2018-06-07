@@ -51,7 +51,6 @@ export default {
   top: 16%;
   width: 50%;
   max-width: 500px;
-  min-width: 470px;
 
   background-color: white;
 
@@ -88,6 +87,8 @@ export default {
         margin-bottom: 2em;
 
         font-size: 16px;
+        font-weight: 800;
+        color: #555;
         line-height: 24px;
 
         border-width: 0px 0px 2px 0px;

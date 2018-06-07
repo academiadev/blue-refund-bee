@@ -25,7 +25,7 @@ body {
   -webkit-font-smoothsing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-image: radial-gradient(#bbb 5%, transparent 0);
+  background-image: radial-gradient(#ddd 10%, transparent 0);
   background-size: 30px 30px;
 }
 
