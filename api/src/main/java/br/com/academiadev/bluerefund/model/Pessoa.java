@@ -29,14 +29,14 @@ public class Pessoa implements Serializable {
 	@Column
 	private String nome;
 
-	@Column
+	@Column(unique=true)
 	private String email;
 
 	@Column
 	private Integer hashSenha;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_empresa", nullable = false)
+	@JoinColumn(name = "empresa", nullable = false)
 	private Empresa empresa; 
 
 	public Pessoa() {
