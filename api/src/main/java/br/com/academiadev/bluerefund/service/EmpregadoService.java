@@ -2,6 +2,8 @@ package br.com.academiadev.bluerefund.service;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +82,7 @@ public class EmpregadoService {
 		boolean caracterEspecial = false;
 		boolean caracterNumerico = false;
 		for(int i=0; i<senha.length(); i++) {
-			if( ((int)senha.charAt(i) >= 32 && (int)senha.charAt(i) <= 47) || (int)senha.charAt(i) == 95 ) 
+			if( ((int)senha.charAt(i) >= 32 && (int)senha.charAt(i) <= 47) || senha.charAt(i) == 95 ) 
 				caracterEspecial = true;
 			if( (int)senha.charAt(i) >= 48 && (int)senha.charAt(i) <= 57  )
 				caracterNumerico = true;
@@ -107,26 +109,23 @@ public class EmpregadoService {
 		return false;
 	}
 	
-	public String novaSenha(String senhaAntiga1,String senhaAntiga2, String email)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException {
+	public void novaSenha(String senhaAntiga1,String novaSenha, String email)
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 		
 		Empregado empregado = empregadoRepository.findByEmail(email);
-		validacoesNovaSenha(senhaAntiga1, senhaAntiga2, email, empregado);
-		
-		String senha = new SenhaService().novaSenha();
+		validacoesNovaSenha(senhaAntiga1, novaSenha, email, empregado);
 		
 //		empregadoRepository.delete(empregado);
-		empregado.setHashSenha(senha.hashCode());
+		empregado.setHashSenha(novaSenha.hashCode());
 		empregadoRepository.save(empregado);
 		
-		return senha;
 	}
 
-	private void validacoesNovaSenha(String senhaAntiga1, String senhaAntiga2, String email, Empregado empregado)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException {
+	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Empregado empregado)
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 		//Validações
-		if(!senhaAntiga1.equals(senhaAntiga2)) {
-			throw new SenhasDiferentesException();
+		if(!validaSenha(novaSenha)) {
+			throw new SenhaInvalidaException();
 		}
 		
 		if(empregado == null) {
@@ -135,5 +134,17 @@ public class EmpregadoService {
 		if(senhaAntiga1.hashCode() != empregado.getHashSenha()) {
 			throw new SenhaIncorretaException();
 		}
+	}
+	
+	public void recuperaSenha(String email) throws EmailNaoEncontradoException, MessagingException {
+		Empregado empregado = empregadoRepository.findByEmail(email);
+		
+		if(empregado == null)
+			throw new EmailNaoEncontradoException();
+		
+		String novaSenha = new SenhaService().novaSenha();
+		empregado.setHashSenha(novaSenha.hashCode());
+		new EmailService().enviaEmail(email, novaSenha, empregado.getNome());
+		empregadoRepository.save(empregado);
 	}
 }

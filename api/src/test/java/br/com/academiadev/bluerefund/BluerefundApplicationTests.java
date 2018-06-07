@@ -3,6 +3,8 @@ package br.com.academiadev.bluerefund;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.mail.MessagingException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
 import br.com.academiadev.bluerefund.service.AdminService;
+import br.com.academiadev.bluerefund.service.EmailService;
 import br.com.academiadev.bluerefund.service.EmpregadoService;
 import br.com.academiadev.bluerefund.service.EmpresaService;
 
@@ -109,9 +112,14 @@ public class BluerefundApplicationTests {
 	}
 	
 	@Test
-	public void novaSenha() throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException {
-		System.out.println(empregadoService.novaSenha("Gaki_988", "Gaki_988", "empregado1@gmail.com"));
-//		Gaki_988
+	public void novaSenha() throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
+		empregadoService.novaSenha("Gaki_988", "Gaki_988", "empregado1@gmail.com");
+//		Gaki_988 -1757798382
+	}
+	
+	@Test
+	public void enviaEmail() throws MessagingException {
+		new EmailService().enviaEmail("mpgabriel95@gmail.com", "minhasenha", "Gabriel");
 	}
 	
 	
