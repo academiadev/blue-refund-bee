@@ -9,4 +9,5 @@ import br.com.academiadev.bluerefund.model.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
 	public Categoria findByNome(String nome);
+	
 }

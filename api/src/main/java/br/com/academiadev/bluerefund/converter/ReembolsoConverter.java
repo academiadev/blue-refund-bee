@@ -1,7 +1,6 @@
 package br.com.academiadev.bluerefund.converter;
 
 import java.time.format.DateTimeFormatter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
@@ -24,24 +23,25 @@ public class ReembolsoConverter implements Converter<Reembolso, ReembolsoDTO> {
 		dto.setNome(entity.getNome());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		dto.setData(entity.getData().format(formatter).toString());
-//		dto.setCategoria(entity.getCategoria().getNome());
-		
+		dto.setCategoria(entity.getCategoria().getNome());
 		switch(entity.getStatus()) {
 			case AGUARDANDO:
 				dto.setStatus("Aguardando");
 			break;
 			case APROVADO:
 				dto.setStatus("Aprovado");
+			break;
 			case REPROVADO:
 				dto.setStatus("Reprovado");
+			break;
 			default:
 			break;
 		}
 		
 		dto.setValorSolicitado(entity.getValorSolicitado().floatValue());
 		dto.setValorReembolsado(entity.getValorReembolsado().floatValue());
-//		dto.setUrlupload(entity.getUrlUpload());
-//		dto.setEmailEmpregado(entity.getEmpregado().getEmail());
+		dto.setUrlupload(entity.getUrlUpload());
+		dto.setEmailEmpregado(entity.getEmpregado().getEmail());
 		
 		return dto;
 	}
