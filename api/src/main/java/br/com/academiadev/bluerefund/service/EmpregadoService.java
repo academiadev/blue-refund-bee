@@ -34,23 +34,13 @@ public class EmpregadoService {
 	public void cadastrar(String nome, String email, String senha, Integer codigo) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException{
 		
-		Empresa empresa = buscaEmpresaPorCodigo(codigo);
+		Empresa empresa = empresaRepository.findByCodigo(codigo);
 		
 		validacoesCadastrar(email, senha, empresa);
 		
 		Empregado empregado = new Empregado(nome, email, senha, empresa);
 		empregadoRepository.save(empregado);
 	}
-	
-	private Empresa buscaEmpresaPorCodigo(Integer codigo) {
-		List<Empresa> empresas = empresaRepository.findAll();
-		for (Empresa empresa : empresas) {
-			if(empresa.getCodigo().equals(codigo))
-				return empresa;
-		}
-		return null;
-	}
-	
 	
 	private void validacoesCadastrar(String email, String senha, Empresa empresa)
 			throws EmailInvalidoException, EmailJaCadastradoException, SenhaInvalidaException, EmpresaNaoEncontradaException {
@@ -115,10 +105,8 @@ public class EmpregadoService {
 		Empregado empregado = empregadoRepository.findByEmail(email);
 		validacoesNovaSenha(senhaAntiga1, novaSenha, email, empregado);
 		
-//		empregadoRepository.delete(empregado);
 		empregado.setHashSenha(novaSenha.hashCode());
 		empregadoRepository.save(empregado);
-		
 	}
 
 	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Empregado empregado)

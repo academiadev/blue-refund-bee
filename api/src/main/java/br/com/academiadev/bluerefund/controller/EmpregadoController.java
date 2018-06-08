@@ -44,7 +44,7 @@ public class EmpregadoController {
 		empregadoService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	
-	@ApiOperation(value = "Troca a senha do usuário")
+	@ApiOperation(value = "Troca a senha do usuário e a envia por e-mail")
 	@PostMapping("/recuperasenha")
 	public void recuperaSenha(@RequestBody RecuperaSenhaDTO dto) throws EmailNaoEncontradoException, MessagingException {
 		empregadoService.recuperaSenha(dto.getEmail());

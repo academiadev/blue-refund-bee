@@ -2,12 +2,17 @@ package br.com.academiadev.bluerefund.service;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
+import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
+import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.model.Admin;
 import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
@@ -86,6 +91,43 @@ public class AdminService {
 				return true;
 		}
 		return false;
+	}
+	
+	public void novaSenha(String senhaAntiga1,String novaSenha, String email)
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
+		
+		Admin admin = adminRepository.findByEmail(email);
+		validacoesNovaSenha(senhaAntiga1, novaSenha, email, admin);
+		
+		admin.setHashSenha(novaSenha.hashCode());
+		adminRepository.save(admin);
+	}
+
+	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Admin admin)
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
+		//Validações
+		if(!validaSenha(novaSenha)) {
+			throw new SenhaInvalidaException();
+		}
+		
+		if(admin == null) {
+			throw new EmailNaoEncontradoException();
+		}
+		if(senhaAntiga1.hashCode() != admin.getHashSenha()) {
+			throw new SenhaIncorretaException();
+		}
+	}
+	
+	public void recuperaSenha(String email) throws EmailNaoEncontradoException, MessagingException {
+		Admin admin = adminRepository.findByEmail(email);
+		
+		if(admin == null)
+			throw new EmailNaoEncontradoException();
+		
+		String novaSenha = new SenhaService().novaSenha();
+		admin.setHashSenha(novaSenha.hashCode());
+		new EmailService().enviaEmail(email, novaSenha, admin.getNome());
+		adminRepository.save(admin);
 	}
 	
 
