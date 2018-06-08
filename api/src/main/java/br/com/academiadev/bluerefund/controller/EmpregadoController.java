@@ -1,5 +1,7 @@
 package br.com.academiadev.bluerefund.controller;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.academiadev.bluerefund.dto.CadastroEmpregadoDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
+import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
@@ -34,12 +37,17 @@ public class EmpregadoController {
 		empregadoService.cadastrar(dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getCodigoEmpresa());
 	}
 	
-	@ApiOperation(value = "Gera uma nova senha aleatória")
+	@ApiOperation(value = "Troca a senha do usuário")
 	@PostMapping("/novasenha")
-	public String novaSenha(@RequestBody NovaSenhaDTO dto)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException {
-		
-		return empregadoService.novaSenha(dto.getSenha1(), dto.getSenha2(), dto.getEmail());
+	public void novaSenha(@RequestBody NovaSenhaDTO dto)
+			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException {
+		empregadoService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
+	}
+	
+	@ApiOperation(value = "Troca a senha do usuário e a envia por e-mail")
+	@PostMapping("/recuperasenha")
+	public void recuperaSenha(@RequestBody RecuperaSenhaDTO dto) throws EmailNaoEncontradoException, MessagingException {
+		empregadoService.recuperaSenha(dto.getEmail());
 	}
 
 }

@@ -4,5 +4,4 @@ public enum StatusReembolso {
 	
 	APROVADO, REPROVADO, AGUARDANDO;
 	
-	
 }

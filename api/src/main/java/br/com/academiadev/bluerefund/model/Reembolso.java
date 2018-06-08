@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -27,8 +26,7 @@ public class Reembolso {
 	@Column
 	private LocalDate data;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "nome_categoria", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Categoria categoria;
 	@Column
 	private StatusReembolso status;
@@ -39,8 +37,7 @@ public class Reembolso {
 	@Column
 	private String urlUpload;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "empregado", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Empregado empregado;
 	
 	public Reembolso() {
