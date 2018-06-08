@@ -43,6 +43,13 @@ public class ReembolsoController {
 		return reembolsoService.buscaPorEmpregado(email);
 	}
 	
+	@GetMapping("/buscaPorEmpresa")
+	@ApiOperation("Busca todos reembolsos dos empregados de uma empresa")
+	public List<ReembolsoDTO> buscaPorEmpresa(@RequestParam Integer codigo) throws EmpregadoNaoEncontradoException {
+		return reembolsoService.buscaPorEmpresa(codigo);
+	}
+	
+	
 	@PostMapping("/exclui")
 	@ApiOperation("Exclui um reembolso pelo ID")
 	public void exclui(@RequestBody Integer id) throws ReembolsoNaoEncontradoException {

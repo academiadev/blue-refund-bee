@@ -7,5 +7,7 @@ import br.com.academiadev.bluerefund.model.Empresa;
 
 @Repository
 public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
-
+	
+	public Empresa findByCodigo(Integer codigo);
+	
 }

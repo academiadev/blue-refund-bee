@@ -17,10 +17,12 @@ import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.model.Categoria;
 import br.com.academiadev.bluerefund.model.Empregado;
+import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.model.Reembolso;
 import br.com.academiadev.bluerefund.model.StatusReembolso;
 import br.com.academiadev.bluerefund.repository.CategoriaRepository;
 import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
+import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
 
 @Service
@@ -32,6 +34,8 @@ public class ReembolsoService {
 	CategoriaRepository categoriaRepository;
 	@Autowired
 	EmpregadoRepository empregadoRepository;
+	@Autowired
+	EmpresaRepository empresaRepository;
 	
 	public void adiciona(CadastroReembolsoDTO dto) throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
 		
@@ -104,5 +108,28 @@ public class ReembolsoService {
 		reembolso.setStatus(StatusReembolso.APROVADO);
 		reembolsoRepository.save(reembolso);
 	}
+	
+	public List<ReembolsoDTO> buscaPorEmpresa(Integer codigo) throws EmpregadoNaoEncontradoException{
+		
+		Empresa empresa = empresaRepository.findByCodigo(codigo);
+		
+		if(empresa == null)
+			throw new EmpregadoNaoEncontradoException();
+		
+		List<Empregado> empregados = empresa.getEmpregados();
+		List<Reembolso> reembolsos = new ArrayList<>();
+		for (Empregado empregado : empregados) {
+			reembolsos.addAll(reembolsoRepository.findByEmpregado(empregado));
+		}
+
+		List<ReembolsoDTO> dtos = new ArrayList<>();
+		
+		for (Reembolso reembolso : reembolsos) {
+			dtos.add(new ReembolsoConverter().toDTO(reembolso));
+		}
+		return dtos;
+	}
+	
+	
 	
 }
