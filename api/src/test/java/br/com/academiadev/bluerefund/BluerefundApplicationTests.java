@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.academiadev.bluerefund.converter.ReembolsoConverter;
+import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
@@ -120,6 +122,19 @@ public class BluerefundApplicationTests {
 	@Test
 	public void enviaEmail() throws MessagingException {
 		new EmailService().enviaEmail("mpgabriel95@gmail.com", "minhasenha", "Gabriel");
+	}
+	
+	@Test
+	public void converterReembolso() {
+		Reembolso reembolso = reembolsoRepository.findById((long)23);
+		ReembolsoDTO dto = new ReembolsoConverter().toDTO(reembolso);
+		System.out.println(dto.getData());
+		Categoria cat = reembolso.getCategoria();
+		
+//		System.out.println(dto.getEmailEmpregado());
+//		System.out.println(dto.getStatus());
+//		System.out.println(dto.getId());
+		
 	}
 	
 	

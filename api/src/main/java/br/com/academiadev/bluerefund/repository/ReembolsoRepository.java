@@ -9,4 +9,6 @@ import br.com.academiadev.bluerefund.model.Reembolso;
 @Repository
 public interface ReembolsoRepository extends JpaRepository<Reembolso, Long>{
 
+	public Reembolso findById(Long id);
+
 }
