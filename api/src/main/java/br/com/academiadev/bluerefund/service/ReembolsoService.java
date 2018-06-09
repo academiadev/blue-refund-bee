@@ -14,7 +14,9 @@ import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.model.Categoria;
 import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
@@ -58,8 +60,8 @@ public class ReembolsoService {
 			throw new EmpregadoNaoEncontradoException();
 	}
 	
-	public List<ReembolsoDTO> buscaPorEmpregado(String email) throws EmailNaoEncontradoException{
-		Empregado empregado = empregadoRepository.findByEmail(email);
+	public List<ReembolsoDTO> buscaPorEmpregado(Integer id) throws EmailNaoEncontradoException{
+		Empregado empregado = empregadoRepository.findById(id.longValue());
 		
 		if(empregado==null)
 			throw new EmailNaoEncontradoException();
@@ -93,11 +95,14 @@ public class ReembolsoService {
 		reembolsoRepository.save(reembolso);
 	}
 	
-	public void aprova(Long id, BigDecimal valorReembolsado) throws ReembolsoNaoEncontradoException {
+	public void aprova(Long id, BigDecimal valorReembolsado) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		Reembolso reembolso = reembolsoRepository.findById(id);
 		
 		if(reembolso == null)
 			throw new ReembolsoNaoEncontradoException();
+		
+		if(valorReembolsado.compareTo(reembolso.getValorSolicitado()) == 1)
+			throw new ValorInvalidoException();
 		
 		if(valorReembolsado.equals(new BigDecimal(0))) {
 			reembolso.setValorReembolsado(reembolso.getValorSolicitado());
@@ -109,12 +114,12 @@ public class ReembolsoService {
 		reembolsoRepository.save(reembolso);
 	}
 	
-	public List<ReembolsoDTO> buscaPorEmpresa(Integer codigo) throws EmpregadoNaoEncontradoException{
+	public List<ReembolsoDTO> buscaPorEmpresa(Integer id) throws EmpresaNaoEncontradaException{
 		
-		Empresa empresa = empresaRepository.findByCodigo(codigo);
+		Empresa empresa = empresaRepository.findById(id.longValue());
 		
 		if(empresa == null)
-			throw new EmpregadoNaoEncontradoException();
+			throw new EmpresaNaoEncontradaException();
 		
 		List<Empregado> empregados = empresa.getEmpregados();
 		List<Reembolso> reembolsos = new ArrayList<>();

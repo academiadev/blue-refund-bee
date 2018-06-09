@@ -17,7 +17,9 @@ import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.service.ReembolsoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,14 +41,14 @@ public class ReembolsoController {
 	
 	@GetMapping("/buscaPorEmpregado")
 	@ApiOperation("Busca todos reembolsos de um empregado")
-	public List<ReembolsoDTO> buscaPorEmpregado(@RequestParam String email) throws EmailNaoEncontradoException {
-		return reembolsoService.buscaPorEmpregado(email);
+	public List<ReembolsoDTO> buscaPorEmpregado(@RequestParam Integer id) throws EmailNaoEncontradoException {
+		return reembolsoService.buscaPorEmpregado(id);
 	}
 	
 	@GetMapping("/buscaPorEmpresa")
 	@ApiOperation("Busca todos reembolsos dos empregados de uma empresa")
-	public List<ReembolsoDTO> buscaPorEmpresa(@RequestParam Integer codigo) throws EmpregadoNaoEncontradoException {
-		return reembolsoService.buscaPorEmpresa(codigo);
+	public List<ReembolsoDTO> buscaPorEmpresa(@RequestParam Integer id) throws EmpresaNaoEncontradaException {
+		return reembolsoService.buscaPorEmpresa(id);
 	}
 	
 	
@@ -65,7 +67,7 @@ public class ReembolsoController {
 	@PostMapping("/aprova")
 	@ApiOperation("Aprova um reembolso com o seu id. se o valor reembolsado for 0, ele é integralmente reembolsado,"
 			+ " se não é reembolsado o valor definido")
-	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException {
+	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		reembolsoService.aprova((long) dto.getId(), new BigDecimal(dto.getValorReembolsado()));
 	}
 }

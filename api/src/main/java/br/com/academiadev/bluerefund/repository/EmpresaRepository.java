@@ -10,4 +10,6 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
 	
 	public Empresa findByCodigo(Integer codigo);
 	
+	public Empresa findById(Long id);
+	
 }
