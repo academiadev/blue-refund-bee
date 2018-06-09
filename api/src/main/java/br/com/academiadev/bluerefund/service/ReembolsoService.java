@@ -15,6 +15,7 @@ import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.model.Categoria;
 import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
@@ -93,11 +94,14 @@ public class ReembolsoService {
 		reembolsoRepository.save(reembolso);
 	}
 	
-	public void aprova(Long id, BigDecimal valorReembolsado) throws ReembolsoNaoEncontradoException {
+	public void aprova(Long id, BigDecimal valorReembolsado) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		Reembolso reembolso = reembolsoRepository.findById(id);
 		
 		if(reembolso == null)
 			throw new ReembolsoNaoEncontradoException();
+		
+		if(valorReembolsado.compareTo(reembolso.getValorSolicitado()) == 1)
+			throw new ValorInvalidoException();
 		
 		if(valorReembolsado.equals(new BigDecimal(0))) {
 			reembolso.setValorReembolsado(reembolso.getValorSolicitado());

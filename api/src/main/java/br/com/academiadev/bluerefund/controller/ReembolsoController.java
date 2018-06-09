@@ -18,6 +18,7 @@ import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.service.ReembolsoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +66,7 @@ public class ReembolsoController {
 	@PostMapping("/aprova")
 	@ApiOperation("Aprova um reembolso com o seu id. se o valor reembolsado for 0, ele é integralmente reembolsado,"
 			+ " se não é reembolsado o valor definido")
-	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException {
+	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		reembolsoService.aprova((long) dto.getId(), new BigDecimal(dto.getValorReembolsado()));
 	}
 }
