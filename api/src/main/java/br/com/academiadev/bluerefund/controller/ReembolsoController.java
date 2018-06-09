@@ -17,6 +17,7 @@ import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.service.ReembolsoService;
@@ -40,14 +41,14 @@ public class ReembolsoController {
 	
 	@GetMapping("/buscaPorEmpregado")
 	@ApiOperation("Busca todos reembolsos de um empregado")
-	public List<ReembolsoDTO> buscaPorEmpregado(@RequestParam String email) throws EmailNaoEncontradoException {
-		return reembolsoService.buscaPorEmpregado(email);
+	public List<ReembolsoDTO> buscaPorEmpregado(@RequestParam Integer id) throws EmailNaoEncontradoException {
+		return reembolsoService.buscaPorEmpregado(id);
 	}
 	
 	@GetMapping("/buscaPorEmpresa")
 	@ApiOperation("Busca todos reembolsos dos empregados de uma empresa")
-	public List<ReembolsoDTO> buscaPorEmpresa(@RequestParam Integer codigo) throws EmpregadoNaoEncontradoException {
-		return reembolsoService.buscaPorEmpresa(codigo);
+	public List<ReembolsoDTO> buscaPorEmpresa(@RequestParam Integer id) throws EmpresaNaoEncontradaException {
+		return reembolsoService.buscaPorEmpresa(id);
 	}
 	
 	

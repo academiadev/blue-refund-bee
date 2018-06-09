@@ -10,4 +10,7 @@ import br.com.academiadev.bluerefund.model.Empregado;
 public interface EmpregadoRepository extends JpaRepository<Empregado, Long> {
 	
 	public Empregado findByEmail(String email);
+	
+	public Empregado findById(Long id);
+	
 }
