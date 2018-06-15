@@ -7,9 +7,11 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
+import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
@@ -40,6 +42,21 @@ public class AdminService {
 		
 		adminRepository.save(admin);
 	}
+	
+	public void cadastrarPorCodigo(CadastroPorCodigoDTO dto, Empresa empresa ) 
+			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException{
+		
+		validacoesCadastrar(dto.getEmail(), dto.getSenha());
+		
+		if(empresa == null)
+			throw new EmpresaNaoEncontradaException();
+		
+		Admin admin = new Admin(dto.getNome(), dto.getEmail(), dto.getSenha(), empresa);
+		
+		adminRepository.save(admin);
+	}
+	
+	
 
 	private void validacoesCadastrar(String email, String senha)
 			throws EmailInvalidoException, EmailJaCadastradoException, SenhaInvalidaException {

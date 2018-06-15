@@ -1,6 +1,6 @@
 package br.com.academiadev.bluerefund.dto;
 
-public class CadastroEmpregadoDTO {
+public class CadastroPorCodigoDTO {
 	
 	private String nome;
 	private String email;

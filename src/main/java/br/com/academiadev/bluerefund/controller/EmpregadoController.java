@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.academiadev.bluerefund.dto.CadastroEmpregadoDTO;
+import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
@@ -32,7 +32,7 @@ public class EmpregadoController {
 	
 	@ApiOperation(value = "Cadastra um empregado e o relaciona com uma empresa")
 	@PostMapping("/cadastro")
-	public void cadastro(@RequestBody CadastroEmpregadoDTO dto) 
+	public void cadastro(@RequestBody CadastroPorCodigoDTO dto) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException {
 		empregadoService.cadastrar(dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getCodigoEmpresa());
 	}

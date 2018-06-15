@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
-import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
-import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
@@ -29,12 +26,12 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 
-	@ApiOperation(value = "Cadastra um admin e uma empresa")
-	@PostMapping("/cadastro")
-	public void cadastro(@RequestBody CadastroAdminDTO cadastroAdminDTO) 
-			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException {
-		adminService.cadastrar(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
-	}
+//	@ApiOperation(value = "Cadastra um admin e uma empresa")
+//	@PostMapping("/cadastro")
+//	public void cadastro(@RequestBody CadastroAdminDTO cadastroAdminDTO) 
+//			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException {
+//		adminService.cadastrar(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
+//	}
 	
 	@ApiOperation(value = "Troca a senha do usuário")
 	@PostMapping("/novasenha")

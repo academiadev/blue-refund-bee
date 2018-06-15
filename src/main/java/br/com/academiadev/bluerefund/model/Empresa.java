@@ -22,6 +22,8 @@ public class Empresa {
 	private String nome;
 	@Column
 	private Integer codigo;
+	@Column
+	private Integer codigoAdmin;
 	
 	@OneToMany(mappedBy = "empresa")
 	private List<Admin> admins;
@@ -37,7 +39,9 @@ public class Empresa {
 		super();
 		this.nome = nome;
 		String cod = nome + Math.random();
+		String codAdm = cod + id;
 		this.codigo = cod.hashCode();
+		this.codigoAdmin = codAdm.hashCode();
 	}
 	public Long getId() {
 		return id;
@@ -58,8 +62,21 @@ public class Empresa {
 		this.codigo = codigo;
 	}
 	
+	public Integer getCodigoAdmin() {
+		return codigoAdmin;
+	}
+
+	public void setCodigoAdmin(Integer codigoAdmin) {
+		this.codigoAdmin = codigoAdmin;
+	}
+
 	public void setNovoCodigo() {
 		String cod = this.nome + Math.random();
+		this.codigo = cod.hashCode();
+	}
+	
+	public void setNovoCodigoAdmin() {
+		String cod = this.nome + id + Math.random();
 		this.codigo = cod.hashCode();
 	}
 
