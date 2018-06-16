@@ -50,7 +50,7 @@ public class AutenticacaoController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDTO authenticationRequest, HttpServletResponse response, Device dispositivo) throws AuthenticationException, IOException {
-		final Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsuario(), authenticationRequest.getSenha()));
+		final Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsuario(), authenticationRequest.getSenha().hashCode()));
 		SecurityContextHolder.getContext().setAuthentication(autenticacao);
 		Usuario usuario = (Usuario) autenticacao.getPrincipal();
 		String token = tokenHelper.gerarToken(usuario.getEmail(), dispositivo);
