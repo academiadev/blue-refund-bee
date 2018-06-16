@@ -1,6 +1,7 @@
 package br.com.academiadev.bluerefund.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -33,6 +34,12 @@ public class Pessoa implements Serializable {
 
 	@Column
 	private Integer hashSenha;
+	
+	@Column(name = "ultima_troca_de_senha")
+	private LocalDateTime ultimaTrocaDeSenha;
+	
+	@Column
+	private String role;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Empresa empresa; 
@@ -89,4 +96,25 @@ public class Pessoa implements Serializable {
 		this.empresa = empresa;
 	}
 
+	public LocalDateTime getUltimaTrocaDeSenha() {
+		return ultimaTrocaDeSenha;
+	}
+
+	public void setUltimaTrocaDeSenha(LocalDateTime ultimaTrocaDeSenha) {
+		this.ultimaTrocaDeSenha = ultimaTrocaDeSenha;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	
 }

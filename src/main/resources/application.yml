@@ -1,0 +1,25 @@
+app:
+  name: bluerefund
+spring:
+  application:
+    name: bluerefund
+  datasource:
+    url: jdbc:postgresql://localhost/bluerefunddb
+    username: postgres
+    password: admin
+  jpa:
+    generate-ddl: true
+  profiles:
+    active: dev
+server:
+  port: ${PORT:8086}
+jwt:
+  header: Authorization
+  expires_in: 3000
+  mobile_expires_in: 3000
+  secret: ACADEMIADEV
+  pass_secret: ACADDEV
+management:
+  security:
+    enabled: false
+  contextPath: /management
