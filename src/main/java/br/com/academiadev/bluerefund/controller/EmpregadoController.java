@@ -37,14 +37,14 @@ public class EmpregadoController {
 		empregadoService.cadastrar(dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getCodigoEmpresa());
 	}
 	
-	@ApiOperation(value = "Troca a senha do usu·rio")
+	@ApiOperation(value = "Troca a senha do usu√°rio")
 	@PostMapping("/novasenha")
 	public void novaSenha(@RequestBody NovaSenhaDTO dto)
 			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException {
 		empregadoService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	
-	@ApiOperation(value = "Troca a senha do usu·rio e a envia por e-mail")
+	@ApiOperation(value = "Troca a senha do usu√°rio e a envia por e-mail")
 	@PostMapping("/recuperasenha")
 	public void recuperaSenha(@RequestBody RecuperaSenhaDTO dto) throws EmailNaoEncontradoException, MessagingException {
 		empregadoService.recuperaSenha(dto.getEmail());

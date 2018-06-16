@@ -31,6 +31,8 @@ import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.TokenDTO;
 import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.service.CustomUserDetailsService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +52,7 @@ public class AutenticacaoController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDTO authenticationRequest, HttpServletResponse response, Device dispositivo) throws AuthenticationException, IOException {
-		final Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsuario(), authenticationRequest.getSenha().hashCode()));
+ 		final Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsuario(), authenticationRequest.getSenha()));
 		SecurityContextHolder.getContext().setAuthentication(autenticacao);
 		Usuario usuario = (Usuario) autenticacao.getPrincipal();
 		String token = tokenHelper.gerarToken(usuario.getEmail(), dispositivo);
@@ -72,6 +74,9 @@ public class AutenticacaoController {
 		}
 	}
 
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
 	@RequestMapping(value = "/isauth", method = RequestMethod.POST)
 	public ResponseEntity<?> isAuth(HttpServletRequest request) {
 		String token = tokenHelper.getToken(request);

@@ -48,7 +48,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		log.debug("Changing password for user '" + username + "'");
 		Usuario user = (Usuario) loadUserByUsername(username);
 
-		user.setHashSenha(passwordEncoder.encode(newPassword).hashCode());
+		user.setHashSenha(passwordEncoder.encode(newPassword));
 		usuarioRepository.save(user);
 
 	}

@@ -33,7 +33,7 @@ public class ReembolsoController {
 	ReembolsoService reembolsoService;
 	
 	@PostMapping("/adiciona")
-	@ApiOperation(value = "Adiciona um novo reembolso ao funcion·rio")
+	@ApiOperation(value = "Adiciona um novo reembolso ao funcion√°rio")
 	public void adiciona(@RequestBody CadastroReembolsoDTO dto) 
 			throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
 		reembolsoService.adiciona(dto);
@@ -65,8 +65,8 @@ public class ReembolsoController {
 	}
 	
 	@PostMapping("/aprova")
-	@ApiOperation("Aprova um reembolso com o seu id. se o valor reembolsado for 0, ele È integralmente reembolsado,"
-			+ " se n„o È reembolsado o valor definido")
+	@ApiOperation("Aprova um reembolso com o seu id. se o valor reembolsado for 0, ele √© integralmente reembolsado,"
+			+ " se n√£o, √© reembolsado o valor definido")
 	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		reembolsoService.aprova((long) dto.getId(), new BigDecimal(dto.getValorReembolsado()));
 	}

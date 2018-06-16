@@ -1,8 +1,11 @@
 package br.com.academiadev.bluerefund.service;
 
+import java.util.ArrayList;
+
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
@@ -13,8 +16,10 @@ import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
+import br.com.academiadev.bluerefund.model.Autorizacao;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.model.Usuario;
+import br.com.academiadev.bluerefund.repository.AutorizacaoRepository;
 import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
 @Service
@@ -24,6 +29,10 @@ public class AdminService {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private EmpresaService empresaService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private AutorizacaoRepository autorizacaoRepository;
 	
 	public void cadastrarComEmpresa(String nome, String email, String senha, String nomeEmpresa) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException{
@@ -32,8 +41,10 @@ public class AdminService {
 		
 		
 		Empresa empresa = empresaService.cadastrar(nomeEmpresa);
-		Usuario usuario = new Usuario(nome, email, senha, "ADMIN", empresa);
-		
+		Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), empresa);
+		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_ADMIN");
+		usuario.setAutorizacoes(new ArrayList<Autorizacao>());
+		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
 	}
@@ -46,7 +57,9 @@ public class AdminService {
 		if(empresa == null)
 			throw new EmpresaNaoEncontradaException();
 		
-		Usuario usuario = new Usuario(dto.getNome(), dto.getEmail(), dto.getSenha(), "ADMIN", empresa);
+		Usuario usuario = new Usuario(dto.getNome(), dto.getEmail(), passwordEncoder.encode(dto.getSenha()), empresa);
+		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_ADMIN");
+		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
 	}
@@ -99,17 +112,17 @@ public class AdminService {
 		return false;
 	}
 	
-	public void novaSenha(String senhaAntiga1,String novaSenha, String email)
+	public void novaSenha(String senhaAntiga,String novaSenha, String email)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 		
 		Usuario usuario = usuarioRepository.findByEmail(email);
-		validacoesNovaSenha(senhaAntiga1, novaSenha, email, usuario);
+		validacoesNovaSenha(senhaAntiga, novaSenha, email, usuario);
 		
-		usuario.setHashSenha(novaSenha.hashCode());
+		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
 		usuarioRepository.save(usuario);
 	}
 
-	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Usuario usuario)
+	private void validacoesNovaSenha(String senhaAntiga, String novaSenha, String email, Usuario usuario)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 
 		if(!validaSenha(novaSenha)) {
@@ -119,7 +132,7 @@ public class AdminService {
 		if(usuario == null) {
 			throw new EmailNaoEncontradoException();
 		}
-		if(senhaAntiga1.hashCode() != usuario.getHashSenha()) {
+		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
 			throw new SenhaIncorretaException();
 		}
 	}
@@ -131,7 +144,7 @@ public class AdminService {
 			throw new EmailNaoEncontradoException();
 		
 		String novaSenha = new SenhaService().novaSenha();
-		usuario.setHashSenha(novaSenha.hashCode());
+		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
 		new EmailService().enviaEmail(email, novaSenha, usuario.getNome());
 		usuarioRepository.save(usuario);
 	}
