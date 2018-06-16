@@ -18,14 +18,14 @@ import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.model.Categoria;
-import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.model.Reembolso;
 import br.com.academiadev.bluerefund.model.StatusReembolso;
+import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.repository.CategoriaRepository;
-import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.ReembolsoRepository;
+import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
 @Service
 public class ReembolsoService {
@@ -35,38 +35,38 @@ public class ReembolsoService {
 	@Autowired
 	CategoriaRepository categoriaRepository;
 	@Autowired
-	EmpregadoRepository empregadoRepository;
+	UsuarioRepository usuarioRepository;
 	@Autowired
 	EmpresaRepository empresaRepository;
 	
 	public void adiciona(CadastroReembolsoDTO dto) throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
 		
 		Categoria categoria = categoriaRepository.findByNome(dto.getCategoria());
-		Empregado empregado = empregadoRepository.findByEmail(dto.getEmailEmpregado());
-		
-		validacoesAdiciona(categoria, empregado);
+		Usuario usuario = usuarioRepository.findByEmailAndRole(dto.getEmailEmpregado(), "EMPREGADO");
+
+		validacoesAdiciona(categoria, usuario);
 			
 		Reembolso reembolso = new Reembolso(dto.getNome(),categoria , new BigDecimal(dto.getValorSolicitado()),
-				dto.getUploadUrl(), empregado, LocalDate.now());
+				dto.getUploadUrl(), usuario, LocalDate.now());
 		
 		reembolsoRepository.save(reembolso);
 	}
 
-	private void validacoesAdiciona(Categoria categoria, Empregado empregado)
+	private void validacoesAdiciona(Categoria categoria, Usuario usuario)
 			throws CategoriaNaoCadastradaException, EmpregadoNaoEncontradoException {
 		if(categoria == null)
 			throw new CategoriaNaoCadastradaException();
-		if(empregado == null)
+		if(usuario == null)
 			throw new EmpregadoNaoEncontradoException();
 	}
 	
 	public List<ReembolsoDTO> buscaPorEmpregado(Integer id) throws EmailNaoEncontradoException{
-		Empregado empregado = empregadoRepository.findById(id.longValue());
+		Usuario usuario = usuarioRepository.findByIdAndRole(id.longValue(), "EMPREGADO");
 		
-		if(empregado==null)
+		if(usuario==null)
 			throw new EmailNaoEncontradoException();
 			
-		List<Reembolso> reembolsos = reembolsoRepository.findByEmpregado(empregado);
+		List<Reembolso> reembolsos = reembolsoRepository.findByUsuario(usuario);
 		List<ReembolsoDTO> dtos = new ArrayList<>();
 		
 		for (Reembolso reembolso : reembolsos) {
@@ -121,10 +121,10 @@ public class ReembolsoService {
 		if(empresa == null)
 			throw new EmpresaNaoEncontradaException();
 		
-		List<Empregado> empregados = empresa.getEmpregados();
+		List<Usuario> usuarios = empresa.getUsuarios();
 		List<Reembolso> reembolsos = new ArrayList<>();
-		for (Empregado empregado : empregados) {
-			reembolsos.addAll(reembolsoRepository.findByEmpregado(empregado));
+		for (Usuario usuario : usuarios) {
+			reembolsos.addAll(reembolsoRepository.findByUsuario(usuario));
 		}
 
 		List<ReembolsoDTO> dtos = new ArrayList<>();

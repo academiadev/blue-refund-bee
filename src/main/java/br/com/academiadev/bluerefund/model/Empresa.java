@@ -26,10 +26,7 @@ public class Empresa {
 	private Integer codigoAdmin;
 	
 	@OneToMany(mappedBy = "empresa")
-	private List<Admin> admins;
-	
-	@OneToMany(mappedBy = "empresa")
-	private List<Empregado> empregados;
+	private List<Usuario> usuarios;
 		
 	public Empresa() {
 
@@ -80,21 +77,15 @@ public class Empresa {
 		this.codigo = cod.hashCode();
 	}
 
-	public List<Admin> getAdmins() {
-		return admins;
+	public List<Usuario> getUsuarios() {
+		return usuarios;
 	}
 
-	public void setAdmins(List<Admin> admins) {
-		this.admins = admins;
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
-	public List<Empregado> getEmpregados() {
-		return empregados;
-	}
-
-	public void setEmpregados(List<Empregado> empregados) {
-		this.empregados = empregados;
-	}
+	
 	
 
 }

@@ -1,7 +1,5 @@
 package br.com.academiadev.bluerefund.service;
 
-import java.util.List;
-
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,32 +13,29 @@ import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
-import br.com.academiadev.bluerefund.model.Admin;
-import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
-import br.com.academiadev.bluerefund.repository.AdminRepository;
-import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
+import br.com.academiadev.bluerefund.model.Usuario;
+import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
 @Service
 public class AdminService {
 	
 	@Autowired
-	private AdminRepository adminRepository;
-	@Autowired
-	private EmpregadoRepository empregadoRepository;
+	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private EmpresaService empresaService;
 	
-	public void cadastrar(String nome, String email, String senha, String nomeEmpresa) 
+	public void cadastrarComEmpresa(String nome, String email, String senha, String nomeEmpresa) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException{
 		
 		validacoesCadastrar(email, senha);
 		
 		
 		Empresa empresa = empresaService.cadastrar(nomeEmpresa);
-		Admin admin = new Admin(nome, email, senha, empresa);
+		Usuario usuario = new Usuario(nome, email, senha, "ADMIN", empresa);
 		
-		adminRepository.save(admin);
+		
+		usuarioRepository.save(usuario);
 	}
 	
 	public void cadastrarPorCodigo(CadastroPorCodigoDTO dto, Empresa empresa ) 
@@ -51,9 +46,9 @@ public class AdminService {
 		if(empresa == null)
 			throw new EmpresaNaoEncontradaException();
 		
-		Admin admin = new Admin(dto.getNome(), dto.getEmail(), dto.getSenha(), empresa);
+		Usuario usuario = new Usuario(dto.getNome(), dto.getEmail(), dto.getSenha(), "ADMIN", empresa);
 		
-		adminRepository.save(admin);
+		usuarioRepository.save(usuario);
 	}
 	
 	
@@ -96,55 +91,49 @@ public class AdminService {
 	}
 	
 	private boolean verificaEmailCadastrado(String email) {
-		List<Admin> admins = adminRepository.findAll();
-		for (Admin admin : admins) {
-			if(admin.getEmail().equals(email))
-				return true;
-		}
+		Usuario usuario = usuarioRepository.findByEmail(email);
 		
-		List<Empregado> empregados = empregadoRepository.findAll();
-		for (Empregado empregado : empregados) {
-			if(empregado.getEmail().equals(email))
-				return true;
-		}
+		if(usuario != null)
+			return true;
+		
 		return false;
 	}
 	
 	public void novaSenha(String senhaAntiga1,String novaSenha, String email)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 		
-		Admin admin = adminRepository.findByEmail(email);
-		validacoesNovaSenha(senhaAntiga1, novaSenha, email, admin);
+		Usuario usuario = usuarioRepository.findByEmail(email);
+		validacoesNovaSenha(senhaAntiga1, novaSenha, email, usuario);
 		
-		admin.setHashSenha(novaSenha.hashCode());
-		adminRepository.save(admin);
+		usuario.setHashSenha(novaSenha.hashCode());
+		usuarioRepository.save(usuario);
 	}
 
-	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Admin admin)
+	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Usuario usuario)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
-		//Validações
+
 		if(!validaSenha(novaSenha)) {
 			throw new SenhaInvalidaException();
 		}
 		
-		if(admin == null) {
+		if(usuario == null) {
 			throw new EmailNaoEncontradoException();
 		}
-		if(senhaAntiga1.hashCode() != admin.getHashSenha()) {
+		if(senhaAntiga1.hashCode() != usuario.getHashSenha()) {
 			throw new SenhaIncorretaException();
 		}
 	}
 	
 	public void recuperaSenha(String email) throws EmailNaoEncontradoException, MessagingException {
-		Admin admin = adminRepository.findByEmail(email);
+		Usuario usuario = usuarioRepository.findByEmail(email);
 		
-		if(admin == null)
+		if(usuario == null)
 			throw new EmailNaoEncontradoException();
 		
 		String novaSenha = new SenhaService().novaSenha();
-		admin.setHashSenha(novaSenha.hashCode());
-		new EmailService().enviaEmail(email, novaSenha, admin.getNome());
-		adminRepository.save(admin);
+		usuario.setHashSenha(novaSenha.hashCode());
+		new EmailService().enviaEmail(email, novaSenha, usuario.getNome());
+		usuarioRepository.save(usuario);
 	}
 	
 

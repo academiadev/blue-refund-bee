@@ -38,7 +38,7 @@ public class CadastroController {
 	@PostMapping("/admineempresa")
 	public void adminEEmpresa(@RequestBody CadastroAdminDTO cadastroAdminDTO) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException {
-		adminService.cadastrar(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
+		adminService.cadastrarComEmpresa(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
 	}
 
 }

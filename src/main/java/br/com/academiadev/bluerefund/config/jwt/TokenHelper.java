@@ -8,7 +8,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import br.com.academiadev.bluerefund.model.Admin;
+import br.com.academiadev.bluerefund.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -83,7 +83,7 @@ public class TokenHelper extends AbstractTokenHelper {
 	}
 
 	public Boolean validarToken(String token, UserDetails userDetails) {
-		Admin user = (Admin) userDetails;
+		Usuario user = (Usuario) userDetails;
 		final String usuario = getUsuario(token);
 		final LocalDateTime dataDeCriacao = getDataCriacao(token);
 		Boolean foiCriadoAntesDaUltimaTrocaDeSenha = isCreatedBeforeLastPasswordReset(dataDeCriacao, user.getUltimaTrocaDeSenha());
