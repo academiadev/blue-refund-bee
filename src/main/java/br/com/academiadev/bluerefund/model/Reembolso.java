@@ -38,14 +38,14 @@ public class Reembolso {
 	private String urlUpload;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Empregado empregado;
+	private Usuario usuario;
 	
 	public Reembolso() {
 
 	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
-			 String urlUpload, Empregado empregado, LocalDate data) {
+			 String urlUpload, Usuario usuario, LocalDate data) {
 		super();
 		this.nome = nome;
 		this.categoria = categoria;
@@ -53,12 +53,12 @@ public class Reembolso {
 		this.valorSolicitado = valorSolicitado;
 		this.valorReembolsado = new BigDecimal(0);
 		this.urlUpload = urlUpload;
-		this.empregado = empregado;
+		this.usuario = usuario;
 		this.data = data;
 	}
 	
 	public Reembolso(String nome, Categoria categoria, BigDecimal valorSolicitado,
-			  Empregado empregado, LocalDate data) {
+			  Usuario usuario, LocalDate data) {
 		super();
 		this.nome = nome;
 		this.categoria = categoria;
@@ -66,7 +66,7 @@ public class Reembolso {
 		this.valorSolicitado = valorSolicitado;
 		this.valorReembolsado = new BigDecimal(0);
 		this.urlUpload = null;
-		this.empregado = empregado;
+		this.usuario = usuario;
 		this.data = data;
 	}
 	
@@ -125,11 +125,11 @@ public class Reembolso {
 		this.urlUpload = urlUpload;
 	}
 
-	public Empregado getEmpregado() {
-		return empregado;
+	public Usuario getEmpregado() {
+		return usuario;
 	}
-	public void setEmpregado(Empregado empregado) {
-		this.empregado = empregado;
+	public void setEmpregado(Usuario empregado) {
+		this.usuario = empregado;
 	}
 	
 	

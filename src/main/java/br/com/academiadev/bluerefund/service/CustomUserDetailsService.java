@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.academiadev.bluerefund.model.Admin;
-import br.com.academiadev.bluerefund.repository.AdminRepository;
+import br.com.academiadev.bluerefund.model.Usuario;
+import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CustomUserDetailsService.class);
 	
 	@Autowired
-	private AdminRepository adminRepository;
+	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Admin user = adminRepository.findByEmail(email);
+		Usuario user = usuarioRepository.findByEmail(email);
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", email));
 		} else {
@@ -46,10 +46,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
 
 		log.debug("Changing password for user '" + username + "'");
-		Admin user = (Admin) loadUserByUsername(username);
+		Usuario user = (Usuario) loadUserByUsername(username);
 
 		user.setHashSenha(passwordEncoder.encode(newPassword).hashCode());
-		adminRepository.save(user);
+		usuarioRepository.save(user);
 
 	}
 }

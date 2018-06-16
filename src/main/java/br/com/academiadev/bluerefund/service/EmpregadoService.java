@@ -1,7 +1,5 @@
 package br.com.academiadev.bluerefund.service;
 
-import java.util.List;
-
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +12,16 @@ import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
-import br.com.academiadev.bluerefund.model.Admin;
-import br.com.academiadev.bluerefund.model.Empregado;
 import br.com.academiadev.bluerefund.model.Empresa;
-import br.com.academiadev.bluerefund.repository.AdminRepository;
-import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
+import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
+import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
 @Service
 public class EmpregadoService {
 	
 	@Autowired
-	private EmpregadoRepository empregadoRepository;
-	@Autowired
-	private AdminRepository adminRepository;
+	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private EmpresaRepository empresaRepository;
 	
@@ -38,8 +32,9 @@ public class EmpregadoService {
 		
 		validacoesCadastrar(email, senha, empresa);
 		
-		Empregado empregado = new Empregado(nome, email, senha, empresa);
-		empregadoRepository.save(empregado);
+		Usuario usuario = new Usuario(nome, email, senha, "EMPREGADO", empresa);
+		
+		usuarioRepository.save(usuario);
 	}
 	
 	private void validacoesCadastrar(String email, String senha, Empresa empresa)
@@ -85,54 +80,48 @@ public class EmpregadoService {
 	}
 	
 	private boolean verificaEmailCadastrado(String email) {
-		List<Admin> admins = adminRepository.findAll();
-		for (Admin admin : admins) {
-			if(admin.getEmail().equals(email))
-				return true;
-		}
+		Usuario usuario = usuarioRepository.findByEmail(email);
 		
-		List<Empregado> empregados = empregadoRepository.findAll();
-		for (Empregado empregado : empregados) {
-			if(empregado.getEmail().equals(email))
-				return true;
-		}
+		if(usuario != null)
+			return true;
+		
 		return false;
 	}
 	
 	public void novaSenha(String senhaAntiga1,String novaSenha, String email)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 		
-		Empregado empregado = empregadoRepository.findByEmail(email);
-		validacoesNovaSenha(senhaAntiga1, novaSenha, email, empregado);
+		Usuario usuario = usuarioRepository.findByEmail(email);
+		validacoesNovaSenha(senhaAntiga1, novaSenha, email, usuario);
 		
-		empregado.setHashSenha(novaSenha.hashCode());
-		empregadoRepository.save(empregado);
+		usuario.setHashSenha(novaSenha.hashCode());
+		usuarioRepository.save(usuario);
 	}
 
-	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Empregado empregado)
+	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Usuario usuario)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
-		//Validações
+
 		if(!validaSenha(novaSenha)) {
 			throw new SenhaInvalidaException();
 		}
 		
-		if(empregado == null) {
+		if(usuario == null) {
 			throw new EmailNaoEncontradoException();
 		}
-		if(senhaAntiga1.hashCode() != empregado.getHashSenha()) {
+		if(senhaAntiga1.hashCode() != usuario.getHashSenha()) {
 			throw new SenhaIncorretaException();
 		}
 	}
 	
 	public void recuperaSenha(String email) throws EmailNaoEncontradoException, MessagingException {
-		Empregado empregado = empregadoRepository.findByEmail(email);
+		Usuario usuario = usuarioRepository.findByEmail(email);
 		
-		if(empregado == null)
+		if(usuario == null)
 			throw new EmailNaoEncontradoException();
 		
 		String novaSenha = new SenhaService().novaSenha();
-		empregado.setHashSenha(novaSenha.hashCode());
-		new EmailService().enviaEmail(email, novaSenha, empregado.getNome());
-		empregadoRepository.save(empregado);
+		usuario.setHashSenha(novaSenha.hashCode());
+		new EmailService().enviaEmail(email, novaSenha, usuario.getNome());
+		usuarioRepository.save(usuario);
 	}
 }

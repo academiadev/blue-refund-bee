@@ -1,20 +1,11 @@
 package br.com.academiadev.bluerefund.converter;
 
 import java.time.format.DateTimeFormatter;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.model.Reembolso;
-import br.com.academiadev.bluerefund.repository.CategoriaRepository;
-import br.com.academiadev.bluerefund.repository.EmpregadoRepository;
 
 public class ReembolsoConverter implements Converter<Reembolso, ReembolsoDTO> {
 
-	@Autowired
-	CategoriaRepository categoriaRepository;
-	@Autowired
-	EmpregadoRepository empregadoRepository;
-	
 	@Override
 	public ReembolsoDTO toDTO(Reembolso entity) {
 		ReembolsoDTO dto = new ReembolsoDTO();

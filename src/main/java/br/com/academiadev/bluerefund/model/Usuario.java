@@ -2,22 +2,20 @@ package br.com.academiadev.bluerefund.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 
-/**
- * Pra que as classes possam herdar os atributos de pessoa precisamos anotar a
- * classe Pessoa com @MappedSuperclass
- *
- */
-@MappedSuperclass
-public class Pessoa implements Serializable {
+
+@Entity
+public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,16 +41,22 @@ public class Pessoa implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Empresa empresa; 
+	
+	@OneToMany(mappedBy = "usuario")
+	private List<Reembolso> reembolsos;
 
-	public Pessoa() {
+	public Usuario() {
 		super();
 	}
+	
+	
 
-	public Pessoa(String nome, String email, String senha, Empresa empresa) {
+	public Usuario(String nome, String email, String senha, String role, Empresa empresa) {
 		super();
 		this.nome = nome;
 		this.email = email;
 		this.hashSenha = senha.hashCode();
+		this.role = role;
 		this.empresa = empresa;
 	}
 
