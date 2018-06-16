@@ -42,7 +42,7 @@ public class ReembolsoService {
 	public void adiciona(CadastroReembolsoDTO dto) throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
 		
 		Categoria categoria = categoriaRepository.findByNome(dto.getCategoria());
-		Usuario usuario = usuarioRepository.findByEmailAndRole(dto.getEmailEmpregado(), "EMPREGADO");
+		Usuario usuario = usuarioRepository.findByEmail(dto.getEmailEmpregado());
 
 		validacoesAdiciona(categoria, usuario);
 			
@@ -61,7 +61,7 @@ public class ReembolsoService {
 	}
 	
 	public List<ReembolsoDTO> buscaPorEmpregado(Integer id) throws EmailNaoEncontradoException{
-		Usuario usuario = usuarioRepository.findByIdAndRole(id.longValue(), "EMPREGADO");
+		Usuario usuario = usuarioRepository.findById(id.longValue());
 		
 		if(usuario==null)
 			throw new EmailNaoEncontradoException();

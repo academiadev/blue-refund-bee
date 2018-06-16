@@ -51,16 +51,16 @@ public class EmailService {
          Message message = new MimeMessage(session);
          message.setFrom(new InternetAddress("bluerefund@gmail.com")); //Remetente
 
-         Address[] toUser = InternetAddress //Destinat·rio(s)
+         Address[] toUser = InternetAddress //Destinat√°rio(s)
                     .parse(destinatario);  
-         String mensagem = "Ol·, "+nome+ "!\n"
-         		+ "Sua nova senha È:" + novaSenha +
+         String mensagem = "Ol√°, "+nome+ "!\n"
+         		+ "Sua nova senha √©:" + novaSenha +
          		"\n\nNunca compartilhe a sua senha!";
          
          message.setRecipients(Message.RecipientType.TO, toUser);
          message.setSubject("Nova senha BlueRefund");//Assunto
          message.setText(mensagem);
-         /**MÈtodo para enviar a mensagem criada*/
+         /**M√©todo para enviar a mensagem criada*/
          Transport.send(message);
 
 

@@ -28,7 +28,7 @@ public class CadastroController {
 	@Autowired
 	AdminService adminService;
 	
-	@ApiOperation(value = "Cadastra um admin ou empregado pelo código da empresa")
+	@ApiOperation(value = "Cadastra um admin ou empregado pelo cÃ³digo da empresa")
 	@PostMapping("/porcodigo")
 	public void porCodigo(@RequestBody CadastroPorCodigoDTO dto) throws CodigosInconsistentesException, SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException {
 		cadastroService.cadastroComCodigo(dto);

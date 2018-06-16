@@ -3,6 +3,7 @@ package br.com.academiadev.bluerefund.service;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
@@ -12,8 +13,10 @@ import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
+import br.com.academiadev.bluerefund.model.Autorizacao;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.model.Usuario;
+import br.com.academiadev.bluerefund.repository.AutorizacaoRepository;
 import br.com.academiadev.bluerefund.repository.EmpresaRepository;
 import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 
@@ -24,6 +27,10 @@ public class EmpregadoService {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private EmpresaRepository empresaRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	AutorizacaoRepository autorizacaoRepository;
 	
 	public void cadastrar(String nome, String email, String senha, Integer codigo) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException{
@@ -32,7 +39,9 @@ public class EmpregadoService {
 		
 		validacoesCadastrar(email, senha, empresa);
 		
-		Usuario usuario = new Usuario(nome, email, senha, "EMPREGADO", empresa);
+		Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), empresa);
+		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_USER");
+		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
 	}
@@ -94,11 +103,11 @@ public class EmpregadoService {
 		Usuario usuario = usuarioRepository.findByEmail(email);
 		validacoesNovaSenha(senhaAntiga1, novaSenha, email, usuario);
 		
-		usuario.setHashSenha(novaSenha.hashCode());
+		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
 		usuarioRepository.save(usuario);
 	}
 
-	private void validacoesNovaSenha(String senhaAntiga1, String novaSenha, String email, Usuario usuario)
+	private void validacoesNovaSenha(String senhaAntiga, String novaSenha, String email, Usuario usuario)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
 
 		if(!validaSenha(novaSenha)) {
@@ -108,7 +117,7 @@ public class EmpregadoService {
 		if(usuario == null) {
 			throw new EmailNaoEncontradoException();
 		}
-		if(senhaAntiga1.hashCode() != usuario.getHashSenha()) {
+		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
 			throw new SenhaIncorretaException();
 		}
 	}
@@ -120,7 +129,7 @@ public class EmpregadoService {
 			throw new EmailNaoEncontradoException();
 		
 		String novaSenha = new SenhaService().novaSenha();
-		usuario.setHashSenha(novaSenha.hashCode());
+		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
 		new EmailService().enviaEmail(email, novaSenha, usuario.getNome());
 		usuarioRepository.save(usuario);
 	}

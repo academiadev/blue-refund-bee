@@ -3,6 +3,7 @@ package br.com.academiadev.bluerefund.controller;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.service.AdminService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @Api("Admin")
@@ -33,14 +36,19 @@ public class AdminController {
 //		adminService.cadastrar(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
 //	}
 	
-	@ApiOperation(value = "Troca a senha do usu·rio")
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@ApiOperation(value = "Troca a senha do usu√°rio")
 	@PostMapping("/novasenha")
+	@PreAuthorize("hasRole('ADMIN')")
 	public void novaSenha(@RequestBody NovaSenhaDTO dto)
 			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException {
 		adminService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	
-	@ApiOperation(value = "Troca a senha do usu·rio e a envia por e-mail")
+	@ApiOperation(value = "Troca a senha do usu√°rio e a envia por e-mail")
 	@PostMapping("/recuperasenha")
 	public void recuperaSenha(@RequestBody RecuperaSenhaDTO dto) throws EmailNaoEncontradoException, MessagingException {
 		adminService.recuperaSenha(dto.getEmail());

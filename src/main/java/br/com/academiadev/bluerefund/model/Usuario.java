@@ -1,24 +1,36 @@
 package br.com.academiadev.bluerefund.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.academiadev.bluerefund.model.Autorizacao;
+
 
 @Entity
-public class Usuario implements Serializable {
+public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
@@ -30,33 +42,32 @@ public class Usuario implements Serializable {
 	@Column(unique=true)
 	private String email;
 
+	@JsonIgnore
 	@Column
-	private Integer hashSenha;
+	private String hashSenha;
 	
 	@Column(name = "ultima_troca_de_senha")
 	private LocalDateTime ultimaTrocaDeSenha;
-	
-	@Column
-	private String role;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Empresa empresa; 
 	
 	@OneToMany(mappedBy = "usuario")
 	private List<Reembolso> reembolsos;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "usuario_autorizacao", joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "autorizacao_id", referencedColumnName = "id"))
+	private List<Autorizacao> autorizacoes;
 
 	public Usuario() {
 		super();
 	}
 	
-	
-
-	public Usuario(String nome, String email, String senha, String role, Empresa empresa) {
+	public Usuario(String nome, String email, String senha, Empresa empresa) {
 		super();
 		this.nome = nome;
 		this.email = email;
-		this.hashSenha = senha.hashCode();
-		this.role = role;
+		this.hashSenha = senha;
 		this.empresa = empresa;
 	}
 
@@ -84,13 +95,27 @@ public class Usuario implements Serializable {
 		this.email = email;
 	}
 
-	public Integer getHashSenha() {
+	public String getHashSenha() {
 		return hashSenha;
 	}
 
-	public void setHashSenha(Integer hashSenha) {
+	public void setHashSenha(String hashSenha) {
 		this.hashSenha = hashSenha;
 	}
+
+
+
+	public List<Reembolso> getReembolsos() {
+		return reembolsos;
+	}
+
+
+
+	public void setReembolsos(List<Reembolso> reembolsos) {
+		this.reembolsos = reembolsos;
+	}
+
+
 
 	public Empresa getEmpresa() {
 		return empresa;
@@ -108,16 +133,69 @@ public class Usuario implements Serializable {
 		this.ultimaTrocaDeSenha = ultimaTrocaDeSenha;
 	}
 	
-	public String getRole() {
-		return role;
+	
+	public List<Autorizacao> getAutorizacoes() {
+		return autorizacoes;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setAutorizacoes(List<Autorizacao> autorizacoes) {
+		this.autorizacoes = autorizacoes;
 	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.autorizacoes;
+	}
+
+
+	@JsonIgnore
+	@Override
+	public String getPassword() {
+		return this.hashSenha.toString();
+	}
+
+
+	@JsonIgnore
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	
