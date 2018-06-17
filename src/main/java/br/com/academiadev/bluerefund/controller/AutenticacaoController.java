@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.academiadev.bluerefund.common.DeviceProvider;
 import br.com.academiadev.bluerefund.config.jwt.TokenHelper;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
-import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.TokenDTO;
 import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.service.CustomUserDetailsService;
@@ -60,6 +58,9 @@ public class AutenticacaoController {
 		return ResponseEntity.ok(new TokenDTO(token, Long.valueOf(expiresIn)));
 	}
 
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
 	public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response, Principal principal) {
 		String token = tokenHelper.getToken(request);
@@ -98,13 +99,5 @@ public class AutenticacaoController {
 		return ResponseEntity.ok().body(result);
 	}
 
-	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> trocarSenha(@RequestBody NovaSenhaDTO trocaSenhaDTO) {
-		userDetailsService.trocarSenha(trocaSenhaDTO.getSenhaAntiga(), trocaSenhaDTO.getNovaSenha());
-		Map<String, String> result = new HashMap<>();
-		result.put("result", "success");
-		return ResponseEntity.accepted().body(result);
-	}
 
 }

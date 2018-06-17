@@ -6,16 +6,8 @@ public class CadastroReembolsoDTO {
 	private String categoria;
 	private float valorSolicitado;
 	private String uploadUrl;
-	private String emailEmpregado;
 	
 	
-	
-	public String getEmailEmpregado() {
-		return emailEmpregado;
-	}
-	public void setEmailEmpregado(String emailEmpregado) {
-		this.emailEmpregado = emailEmpregado;
-	}
 	public String getNome() {
 		return nome;
 	}

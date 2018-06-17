@@ -5,9 +5,12 @@ import java.util.Random;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
@@ -38,9 +41,12 @@ public class SenhaService {
 	}
 	
 	public void novaSenha(String senhaAntiga,String novaSenha, String email)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException {
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		String email_token = currentUser.getName();
 		
-		Usuario usuario = usuarioRepository.findByEmail(email);
+		
+		Usuario usuario = usuarioRepository.findByEmail(email_token);
 		validacoesNovaSenha(senhaAntiga, novaSenha, email, usuario);
 		
 		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
@@ -48,7 +54,7 @@ public class SenhaService {
 	}
 
 	private void validacoesNovaSenha(String senhaAntiga, String novaSenha, String email, Usuario usuario)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException {
 
 		if(!validaSenha(novaSenha)) {
 			throw new SenhaInvalidaException();
@@ -56,6 +62,10 @@ public class SenhaService {
 		
 		if(usuario == null) {
 			throw new EmailNaoEncontradoException();
+		}
+		
+		if(!usuario.getEmail().equals(email)) {
+			throw new EmailInvalidoException();
 		}
 		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
 			throw new SenhaIncorretaException();

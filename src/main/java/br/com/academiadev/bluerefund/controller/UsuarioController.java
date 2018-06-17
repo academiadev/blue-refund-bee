@@ -46,7 +46,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Troca a senha do usuário")
 	@PostMapping("/novasenha")
 	public void novaSenha(@RequestBody NovaSenhaDTO dto)
-			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException {
+			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException, EmailInvalidoException {
 		senhaService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	

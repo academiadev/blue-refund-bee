@@ -1,5 +1,7 @@
 package br.com.academiadev.bluerefund.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class EmpregadoService {
 		
 		Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), empresa);
 		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_USER");
+		usuario.setAutorizacoes(new ArrayList<Autorizacao>());
 		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
