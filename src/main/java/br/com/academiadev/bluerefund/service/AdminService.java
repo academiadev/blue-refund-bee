@@ -2,8 +2,6 @@ package br.com.academiadev.bluerefund.service;
 
 import java.util.ArrayList;
 
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,11 +9,8 @@ import org.springframework.stereotype.Service;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
-import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
-import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
-import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.model.Autorizacao;
 import br.com.academiadev.bluerefund.model.Empresa;
 import br.com.academiadev.bluerefund.model.Usuario;
@@ -62,6 +57,10 @@ public class AdminService {
 		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
+	}
+	
+	public void dadosAdmin() {
+		
 	}
 	
 	
@@ -112,42 +111,7 @@ public class AdminService {
 		return false;
 	}
 	
-	public void novaSenha(String senhaAntiga,String novaSenha, String email)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
-		
-		Usuario usuario = usuarioRepository.findByEmail(email);
-		validacoesNovaSenha(senhaAntiga, novaSenha, email, usuario);
-		
-		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
-		usuarioRepository.save(usuario);
-	}
 
-	private void validacoesNovaSenha(String senhaAntiga, String novaSenha, String email, Usuario usuario)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException {
-
-		if(!validaSenha(novaSenha)) {
-			throw new SenhaInvalidaException();
-		}
-		
-		if(usuario == null) {
-			throw new EmailNaoEncontradoException();
-		}
-		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
-			throw new SenhaIncorretaException();
-		}
-	}
-	
-	public void recuperaSenha(String email) throws EmailNaoEncontradoException, MessagingException {
-		Usuario usuario = usuarioRepository.findByEmail(email);
-		
-		if(usuario == null)
-			throw new EmailNaoEncontradoException();
-		
-		String novaSenha = new SenhaService().novaSenha();
-		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
-		new EmailService().enviaEmail(email, novaSenha, usuario.getNome());
-		usuarioRepository.save(usuario);
-	}
 	
 
 }
