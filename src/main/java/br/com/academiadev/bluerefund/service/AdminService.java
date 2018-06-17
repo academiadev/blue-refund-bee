@@ -54,6 +54,7 @@ public class AdminService {
 		
 		Usuario usuario = new Usuario(dto.getNome(), dto.getEmail(), passwordEncoder.encode(dto.getSenha()), empresa);
 		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_ADMIN");
+		usuario.setAutorizacoes(new ArrayList<Autorizacao>());
 		usuario.getAutorizacoes().add(autorizacao);
 		
 		usuarioRepository.save(usuario);
