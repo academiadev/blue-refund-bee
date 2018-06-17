@@ -38,8 +38,6 @@ public class CadastroService {
 		if(empresa1 == null)
 			adminService.cadastrarPorCodigo(dto, empresa2);
 		
-		
-		
 	}
 	
 }
