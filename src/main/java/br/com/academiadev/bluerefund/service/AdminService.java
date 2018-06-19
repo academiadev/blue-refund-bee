@@ -35,11 +35,13 @@ public class AdminService {
 		validacoesCadastrar(email, senha);
 		
 		
-		Empresa empresa = empresaService.cadastrar(nomeEmpresa);
-		Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), empresa);
+		
+		Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), null);
 		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_ADMIN");
 		usuario.setAutorizacoes(new ArrayList<Autorizacao>());
 		usuario.getAutorizacoes().add(autorizacao);
+		Empresa empresa = empresaService.cadastrar(nomeEmpresa);
+		usuario.setEmpresa(empresa);
 		
 		usuarioRepository.save(usuario);
 	}
