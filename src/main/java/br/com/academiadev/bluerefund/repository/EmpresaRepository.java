@@ -14,4 +14,6 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long>{
 	
 	public Empresa findById(Long id);
 	
+	public Empresa findByNome(String nome);
+	
 }
