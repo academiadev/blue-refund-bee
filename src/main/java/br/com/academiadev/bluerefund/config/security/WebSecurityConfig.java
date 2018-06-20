@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()//
 				.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()//
 				.authorizeRequests()//
-				.antMatchers("/**").permitAll()//
+				.antMatchers("/auth/login").permitAll()//
 				.antMatchers("/usuario/cadastro/**").permitAll()//
 				.antMatchers("/management/**").permitAll()//
 				.anyRequest().authenticated().and()//

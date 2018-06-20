@@ -3,13 +3,16 @@ package br.com.academiadev.bluerefund.controller;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.academiadev.bluerefund.dto.UsuarioDTO;
 import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
+import br.com.academiadev.bluerefund.dto.EmpresaDTO;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
@@ -23,7 +26,9 @@ import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.service.AdminService;
 import br.com.academiadev.bluerefund.service.CadastroService;
+import br.com.academiadev.bluerefund.service.EmpresaService;
 import br.com.academiadev.bluerefund.service.SenhaService;
+import br.com.academiadev.bluerefund.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -39,7 +44,11 @@ public class UsuarioController {
 	@Autowired
 	private CadastroService cadastroService;
 	@Autowired
+	private UsuarioService usuarioService;
+	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private EmpresaService empresaService;
 	
 	@ApiImplicitParams({ //
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
@@ -77,6 +86,25 @@ public class UsuarioController {
 	@PostMapping("/excluir")
 	public void exclui(@RequestBody LoginDTO loginDTO) throws EmailInvalidoException, SenhaIncorretaException  {
 		cadastroService.excluiCadastro(loginDTO);
+	}
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@ApiOperation(value = "Busca dados do usuário")
+	@PostMapping("/dadosUsuario")
+	public UsuarioDTO dadosUsuario(){
+		return usuarioService.dadosUsuario();
+	}
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@ApiOperation(value = "Busca dados da empresa referente ao admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/dadosEmpresaAdmin")
+	public EmpresaDTO dadosEmpresaAdmin(){
+		return empresaService.dadosEmpresa();
 	}
 	
 	

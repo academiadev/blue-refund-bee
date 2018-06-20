@@ -62,10 +62,6 @@ public class AdminService {
 		usuarioRepository.save(usuario);
 	}
 	
-	public void dadosAdmin() {
-		
-	}
-	
 	
 
 	private void validacoesCadastrar(String email, String senha)
