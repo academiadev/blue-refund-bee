@@ -6,6 +6,7 @@ public class CadastroReembolsoDTO {
 	private String categoria;
 	private float valorSolicitado;
 	private String uploadUrl;
+	private String data;
 	
 	
 	public String getNome() {
@@ -31,6 +32,12 @@ public class CadastroReembolsoDTO {
 	}
 	public void setUploadUrl(String uploadUrl) {
 		this.uploadUrl = uploadUrl;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
 	}
 
 }

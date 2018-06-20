@@ -39,7 +39,8 @@ public class ReembolsoConverter implements Converter<Reembolso, ReembolsoDTO> {
 
 	@Override
 	public Reembolso toEntity(ReembolsoDTO dto) {
-		// TODO Auto-generated method stub
+		
+//		Reembolso reembolso = new Reembolso(nome, categoria, valorSolicitado, usuario, data);
 		return null;
 	}
 

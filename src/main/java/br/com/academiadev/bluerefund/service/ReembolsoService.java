@@ -2,6 +2,7 @@ package br.com.academiadev.bluerefund.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +48,13 @@ public class ReembolsoService {
 		Usuario usuario = usuarioRepository.findByEmail(email_token);
 		
 		Categoria categoria = categoriaRepository.findByNome(dto.getCategoria());
-//		Usuario usuario = usuarioRepository.findByEmail(dto.getEmailEmpregado());
 
 		validacoesAdiciona(categoria, usuario);
-			
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		Reembolso reembolso = new Reembolso(dto.getNome(),categoria , new BigDecimal(dto.getValorSolicitado()),
-				dto.getUploadUrl(), usuario, LocalDate.now());
+				dto.getUploadUrl(), usuario, LocalDate.parse(dto.getData(), formatter));
 		
 		reembolsoRepository.save(reembolso);
 	}
