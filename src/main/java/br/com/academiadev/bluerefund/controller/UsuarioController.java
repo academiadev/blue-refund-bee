@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
+import br.com.academiadev.bluerefund.dto.LoginDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
 import br.com.academiadev.bluerefund.exceptions.CodigosInconsistentesException;
@@ -67,6 +68,15 @@ public class UsuarioController {
 	public void adminEEmpresa(@RequestBody CadastroAdminDTO cadastroAdminDTO) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException {
 		adminService.cadastrarComEmpresa(cadastroAdminDTO.getNome(), cadastroAdminDTO.getEmail(), cadastroAdminDTO.getSenha(), cadastroAdminDTO.getNomeEmpresa());
+	}
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@ApiOperation(value = "Exclui um usuário")
+	@PostMapping("/excluir")
+	public void exclui(@RequestBody LoginDTO loginDTO) throws EmailInvalidoException, SenhaIncorretaException  {
+		cadastroService.excluiCadastro(loginDTO);
 	}
 	
 	

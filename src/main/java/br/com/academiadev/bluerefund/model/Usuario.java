@@ -52,7 +52,7 @@ public class Usuario implements UserDetails {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Empresa empresa; 
 	
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario",orphanRemoval=true)
 	private List<Reembolso> reembolsos;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -6,10 +6,10 @@ public class LoginDTO {
 	private String email;
 	private String senha;
 	
-	public String getUsuario() {
+	public String getEmail() {
 		return email;
 	}
-	public void setUsuario(String usuario) {
+	public void setEmail(String usuario) {
 		this.email = usuario;
 	}
 	public String getSenha() {
