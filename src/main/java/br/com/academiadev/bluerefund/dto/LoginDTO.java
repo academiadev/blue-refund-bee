@@ -9,8 +9,8 @@ public class LoginDTO {
 	public String getEmail() {
 		return email;
 	}
-	public void setEmail(String usuario) {
-		this.email = usuario;
+	public void setEmail(String email) {
+		this.email = email;	
 	}
 	public String getSenha() {
 		return senha;
