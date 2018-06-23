@@ -52,7 +52,7 @@ public class AdminService {
 		validacoesCadastrar(dto.getEmail(), dto.getSenha());
 		
 		if(empresa == null)
-			throw new EmpresaNaoEncontradaException();
+			throw new EmpresaNaoEncontradaException("Empresa não encontrada");
 		
 		Usuario usuario = new Usuario(dto.getNome(), dto.getEmail(), passwordEncoder.encode(dto.getSenha()), empresa);
 		Autorizacao autorizacao = autorizacaoRepository.findByNome("ROLE_ADMIN");
@@ -73,13 +73,13 @@ public class AdminService {
 		boolean validaSenha = validaSenha(senha);
 		
 		if(!validaEmail)
-			throw new EmailInvalidoException();
+			throw new EmailInvalidoException("E-mail inválido");
 		
 		if(emailJaCadastrado)
-			throw new EmailJaCadastradoException();
+			throw new EmailJaCadastradoException("E-mail já cadastrado");
 		
 		if(!validaSenha) 
-			throw new SenhaInvalidaException();
+			throw new SenhaInvalidaException("Senha inválida, a senha deve ter pelo menos 8 caracteres, sendo 1 especial e 1 numerico");
 	}
 	
 	private boolean validaSenha(String senha) {

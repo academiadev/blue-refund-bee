@@ -61,23 +61,24 @@ public class SenhaService {
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException, SenhaTrocadaRecentementeException {
 
 		if(!validaSenha(novaSenha)) {
-			throw new SenhaInvalidaException();
+			throw new SenhaInvalidaException("Senha inválida, a senha deve ter pelo menos 8 caracteres, sendo 1 especial e 1 numerico");
 		}
 		
 		if(usuario == null) {
-			throw new EmailNaoEncontradoException();
+			throw new EmailNaoEncontradoException("E-mail não encontrado");
 		}
 		
 		if(!usuario.getEmail().equals(email)) {
-			throw new EmailInvalidoException();
+			throw new EmailInvalidoException("E-mail inválido");
 		}
 		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
-			throw new SenhaIncorretaException();
+			throw new SenhaIncorretaException("Senha incorreta");
 		}
+		long tempoMinimo = 1;
 		if(usuario.getUltimaTrocaDeSenha() != null) {
 			Duration duration = Duration.between(usuario.getUltimaTrocaDeSenha(), LocalDateTime.now());
-			if(duration.toHours() < 1) {
-				throw new SenhaTrocadaRecentementeException();
+			if(duration.toHours() < tempoMinimo) {
+				throw new SenhaTrocadaRecentementeException("Senha trocada em menos de" + tempoMinimo + " hora(s)");
 			}
 				
 		}
@@ -87,7 +88,7 @@ public class SenhaService {
 		Usuario usuario = usuarioRepository.findByEmail(email);
 		
 		if(usuario == null)
-			throw new EmailNaoEncontradoException();
+			throw new EmailNaoEncontradoException("E-mail não encontrado");
 		
 		String novaSenha = new SenhaService().novaSenha();
 		usuario.setHashSenha(passwordEncoder.encode(novaSenha));

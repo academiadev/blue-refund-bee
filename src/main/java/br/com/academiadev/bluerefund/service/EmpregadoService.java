@@ -53,16 +53,16 @@ public class EmpregadoService {
 		boolean validaSenha = validaSenha(senha);
 		
 		if(!validaEmail)
-			throw new EmailInvalidoException();
+			throw new EmailInvalidoException("E-mail inválido");
 		
 		if(emailJaCadastrado)
-			throw new EmailJaCadastradoException();
+			throw new EmailJaCadastradoException("E-mail já cadastrado");
 		
 		if(!validaSenha) 
-			throw new SenhaInvalidaException();
+			throw new SenhaInvalidaException("Senha inválida, a senha deve ter pelo menos 8 caracteres, sendo 1 especial e 1 numerico");
 		
 		if(empresa == null) {
-			throw new EmpresaNaoEncontradaException();
+			throw new EmpresaNaoEncontradaException("Empresa não econtrada, código inválido");
 		}
 	
 	}

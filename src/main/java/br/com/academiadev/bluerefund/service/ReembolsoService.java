@@ -62,9 +62,9 @@ public class ReembolsoService {
 	private void validacoesAdiciona(Categoria categoria, Usuario usuario)
 			throws CategoriaNaoCadastradaException, EmpregadoNaoEncontradoException {
 		if(categoria == null)
-			throw new CategoriaNaoCadastradaException();
+			throw new CategoriaNaoCadastradaException("Categoria não encontrada");
 		if(usuario == null)
-			throw new EmpregadoNaoEncontradoException();
+			throw new EmpregadoNaoEncontradoException("Empregado não encontrado");
 	}
 	
 	public List<ReembolsoDTO> buscaPorEmpregado() throws EmailNaoEncontradoException{
@@ -73,7 +73,7 @@ public class ReembolsoService {
 		Usuario usuario = usuarioRepository.findByEmail(email_token);
 		
 		if(usuario==null)
-			throw new EmailNaoEncontradoException();
+			throw new EmailNaoEncontradoException("E-mail não encontrado");
 			
 		List<Reembolso> reembolsos = reembolsoRepository.findByUsuario(usuario);
 		List<ReembolsoDTO> dtos = new ArrayList<>();
@@ -88,7 +88,7 @@ public class ReembolsoService {
 		Reembolso reembolso = reembolsoRepository.findById(id);
 		
 		if(reembolso == null)
-			throw new ReembolsoNaoEncontradoException();
+			throw new ReembolsoNaoEncontradoException("Reembolso não encontrado");
 		
 		reembolsoRepository.delete(reembolso);
 		
@@ -98,7 +98,7 @@ public class ReembolsoService {
 		Reembolso reembolso = reembolsoRepository.findById(id);
 		
 		if(reembolso == null)
-			throw new ReembolsoNaoEncontradoException();
+			throw new ReembolsoNaoEncontradoException("Reembolso não encontrado");
 		
 		reembolso.setStatus(StatusReembolso.REPROVADO);
 		reembolsoRepository.save(reembolso);
@@ -108,10 +108,10 @@ public class ReembolsoService {
 		Reembolso reembolso = reembolsoRepository.findById(id);
 		
 		if(reembolso == null)
-			throw new ReembolsoNaoEncontradoException();
+			throw new ReembolsoNaoEncontradoException("Reembolso não encontrado");
 		
 		if(valorReembolsado.compareTo(reembolso.getValorSolicitado()) == 1)
-			throw new ValorInvalidoException();
+			throw new ValorInvalidoException("Valor inválido, o valor reembolsado não pode ser maior que o valor solicitado");
 		
 		if(valorReembolsado.equals(new BigDecimal(0))) {
 			reembolso.setValorReembolsado(reembolso.getValorSolicitado());
@@ -130,7 +130,7 @@ public class ReembolsoService {
 		Empresa empresa = usuario_token.getEmpresa();
 		
 		if(empresa == null)
-			throw new EmpresaNaoEncontradaException();
+			throw new EmpresaNaoEncontradaException("Empresa não encontrada");
 		
 		List<Usuario> usuarios = empresa.getUsuarios();
 		List<Reembolso> reembolsos = new ArrayList<>();

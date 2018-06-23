@@ -31,7 +31,7 @@ public class CategoriaService {
 		Categoria categoria = categoriaRepository.findByNome(nome);
 		
 		if(categoria != null)
-			throw new CategoriaJaCadastradaException();
+			throw new CategoriaJaCadastradaException("Categoria já cadastrada");
 			
 		categoriaRepository.save(new Categoria(nome));
 	}

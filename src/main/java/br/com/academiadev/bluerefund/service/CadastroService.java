@@ -57,11 +57,11 @@ public class CadastroService {
 		Usuario usuario = usuarioRepository.findByEmail(email_token);
 		
 		if(!dto.getEmail().equals(usuario.getEmail())) {
-			throw new EmailInvalidoException();
+			throw new EmailInvalidoException("E-mail inválido");
 		}
 		
 		if(!passwordEncoder.matches(dto.getSenha(), usuario.getHashSenha())) {
-			throw new SenhaIncorretaException();
+			throw new SenhaIncorretaException("Senha incorreta");
 		}
 		
 		usuarioRepository.delete(usuario);

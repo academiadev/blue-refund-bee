@@ -1,5 +1,9 @@
 package br.com.academiadev.bluerefund.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ReembolsoNaoEncontradoException extends Exception{
 
 	/**
