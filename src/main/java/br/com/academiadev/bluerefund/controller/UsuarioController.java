@@ -16,6 +16,7 @@ import br.com.academiadev.bluerefund.dto.EmpresaDTO;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
 import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
+import br.com.academiadev.bluerefund.dto.RoleDTO;
 import br.com.academiadev.bluerefund.exceptions.CodigosInconsistentesException;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
@@ -106,6 +107,15 @@ public class UsuarioController {
 	@PostMapping("/dadosEmpresaAdmin")
 	public EmpresaDTO dadosEmpresaAdmin(){
 		return empresaService.dadosEmpresa();
+	}
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@ApiOperation(value = "Retorna a role do usuário")
+	@PostMapping("/role")
+	public RoleDTO role() {
+		return usuarioService.roleUsuario();
 	}
 	
 	
