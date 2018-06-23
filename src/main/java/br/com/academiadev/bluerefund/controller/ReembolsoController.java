@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +20,6 @@ import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
-import br.com.academiadev.bluerefund.model.Empresa;
-import br.com.academiadev.bluerefund.model.Usuario;
-import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 import br.com.academiadev.bluerefund.service.ReembolsoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,9 +32,7 @@ import io.swagger.annotations.ApiOperation;
 public class ReembolsoController {
 	
 	@Autowired
-	private ReembolsoService reembolsoService;
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	ReembolsoService reembolsoService;
 	
 	
 	@ApiImplicitParams({ //
@@ -50,11 +43,7 @@ public class ReembolsoController {
 	@PreAuthorize("hasRole('USER')")
 	public void adiciona(@RequestBody CadastroReembolsoDTO dto) 
 			throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		reembolsoService.adiciona(dto, usuario);
+		reembolsoService.adiciona(dto);
 	}
 	
 	@ApiImplicitParams({ //
@@ -64,11 +53,7 @@ public class ReembolsoController {
 	@PreAuthorize("hasRole('USER')")
 	@ApiOperation("Busca todos reembolsos de um empregado")
 	public List<ReembolsoDTO> buscaPorEmpregado() throws EmailNaoEncontradoException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		return reembolsoService.buscaPorEmpregado(usuario);
+		return reembolsoService.buscaPorEmpregado();
 	}
 	
 	@ApiImplicitParams({ //
@@ -78,12 +63,7 @@ public class ReembolsoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@ApiOperation("Busca todos reembolsos dos empregados de uma empresa")
 	public List<ReembolsoDTO> buscaPorEmpresa() throws EmpresaNaoEncontradaException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario_token = usuarioRepository.findByEmail(email_token);
-		Empresa empresa = usuario_token.getEmpresa();
-		
-		return reembolsoService.buscaPorEmpresa(empresa);
+		return reembolsoService.buscaPorEmpresa();
 	}
 	
 	@ApiImplicitParams({ //

@@ -4,8 +4,6 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +26,6 @@ import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaTrocadaRecentementeException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
-import br.com.academiadev.bluerefund.model.Usuario;
-import br.com.academiadev.bluerefund.repository.UsuarioRepository;
 import br.com.academiadev.bluerefund.service.AdminService;
 import br.com.academiadev.bluerefund.service.CadastroService;
 import br.com.academiadev.bluerefund.service.EmpresaService;
@@ -55,8 +51,6 @@ public class UsuarioController {
 	private AdminService adminService;
 	@Autowired
 	private EmpresaService empresaService;
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 	
 	@ApiImplicitParams({ //
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
@@ -65,11 +59,7 @@ public class UsuarioController {
 	@PostMapping("/novasenha")
 	public void novaSenha(@RequestBody NovaSenhaDTO dto)
 			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException, EmailInvalidoException, SenhaTrocadaRecentementeException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		senhaService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail(), usuario);
+		senhaService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	
 	@ApiOperation(value = "Troca a senha do usuário e a envia por e-mail")
@@ -97,11 +87,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Exclui um usuário")
 	@PostMapping("/excluir")
 	public void exclui(@RequestBody LoginDTO loginDTO) throws EmailInvalidoException, SenhaIncorretaException  {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		cadastroService.excluiCadastro(loginDTO, usuario);
+		cadastroService.excluiCadastro(loginDTO);
 	}
 	
 	@ApiImplicitParams({ //
@@ -110,11 +96,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Busca dados do usuário")
 	@PostMapping("/dadosUsuario")
 	public UsuarioDTO dadosUsuario(){
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		return usuarioService.dadosUsuario(usuario);
+		return usuarioService.dadosUsuario();
 	}
 	
 	@ApiImplicitParams({ //
@@ -124,11 +106,7 @@ public class UsuarioController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/dadosEmpresaAdmin")
 	public EmpresaDTO dadosEmpresaAdmin(){
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		return empresaService.dadosEmpresa(usuario);
+		return empresaService.dadosEmpresa();
 	}
 	
 	@ApiImplicitParams({ //
@@ -137,11 +115,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Retorna a role do usuário")
 	@PostMapping("/role")
 	public RoleDTO role() {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
-		return usuarioService.roleUsuario(usuario);
+		return usuarioService.roleUsuario();
 	}
 	
 	
