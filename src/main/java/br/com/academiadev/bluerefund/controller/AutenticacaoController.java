@@ -31,6 +31,7 @@ import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.service.CustomUserDetailsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,6 +50,7 @@ public class AutenticacaoController {
 	private DeviceProvider deviceProvider;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ApiOperation(value = "Login: Retorna um token válido para o usuário")
 	public ResponseEntity<?> login(@RequestBody LoginDTO authenticationRequest, HttpServletResponse response, Device dispositivo) throws AuthenticationException, IOException {
 		final Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getSenha()));
 		SecurityContextHolder.getContext().setAuthentication(autenticacao);
@@ -61,6 +63,7 @@ public class AutenticacaoController {
 	@ApiImplicitParams({ //
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
 	})
+	@ApiOperation(value = "Gera um novo token com o tempo reiniciado")
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
 	public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response, Principal principal) {
 		String token = tokenHelper.getToken(request);
@@ -78,6 +81,7 @@ public class AutenticacaoController {
 	@ApiImplicitParams({ //
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
 	})
+	@ApiOperation(value = "Verifica que o usuário é autorizado")
 	@RequestMapping(value = "/isauth", method = RequestMethod.POST)
 	public ResponseEntity<?> isAuth(HttpServletRequest request) {
 		String token = tokenHelper.getToken(request);
