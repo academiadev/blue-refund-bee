@@ -2,6 +2,8 @@ package br.com.academiadev.bluerefund.service;
 
 import java.util.ArrayList;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class EmpregadoService {
 	@Autowired
 	AutorizacaoRepository autorizacaoRepository;
 	
+	@Transactional
 	public void cadastrar(String nome, String email, String senha, Integer codigo) 
 			throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException{
 		
