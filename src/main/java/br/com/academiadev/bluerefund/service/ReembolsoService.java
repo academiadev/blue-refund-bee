@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.converter.ReembolsoConverter;
@@ -42,10 +40,7 @@ public class ReembolsoService {
 	@Autowired
 	EmpresaRepository empresaRepository;
 	
-	public void adiciona(CadastroReembolsoDTO dto) throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
+	public void adiciona(CadastroReembolsoDTO dto, Usuario usuario) throws EmpregadoNaoEncontradoException, CategoriaNaoCadastradaException {
 		
 		Categoria categoria = categoriaRepository.findByNome(dto.getCategoria());
 
@@ -67,11 +62,7 @@ public class ReembolsoService {
 			throw new EmpregadoNaoEncontradoException("Empregado não encontrado");
 	}
 	
-	public List<ReembolsoDTO> buscaPorEmpregado() throws EmailNaoEncontradoException{
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
-		
+	public List<ReembolsoDTO> buscaPorEmpregado(Usuario usuario) throws EmailNaoEncontradoException{
 		if(usuario==null)
 			throw new EmailNaoEncontradoException("E-mail não encontrado");
 			
@@ -123,11 +114,7 @@ public class ReembolsoService {
 		reembolsoRepository.save(reembolso);
 	}
 	
-	public List<ReembolsoDTO> buscaPorEmpresa() throws EmpresaNaoEncontradaException{
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario_token = usuarioRepository.findByEmail(email_token);
-		Empresa empresa = usuario_token.getEmpresa();
+	public List<ReembolsoDTO> buscaPorEmpresa(Empresa empresa) throws EmpresaNaoEncontradaException{
 		
 		if(empresa == null)
 			throw new EmpresaNaoEncontradaException("Empresa não encontrada");

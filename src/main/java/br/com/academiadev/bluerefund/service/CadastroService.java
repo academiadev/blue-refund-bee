@@ -2,8 +2,6 @@ package br.com.academiadev.bluerefund.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
@@ -51,10 +49,8 @@ public class CadastroService {
 		
 	}
 	
-	public void excluiCadastro(LoginDTO dto) throws EmailInvalidoException, SenhaIncorretaException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
+	public void excluiCadastro(LoginDTO dto, Usuario usuario) throws EmailInvalidoException, SenhaIncorretaException {
+
 		
 		if(!dto.getEmail().equals(usuario.getEmail())) {
 			throw new EmailInvalidoException("E-mail inválido");

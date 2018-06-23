@@ -7,8 +7,6 @@ import java.util.Random;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +41,9 @@ public class SenhaService {
 		return senha;
 	}
 	
-	public void novaSenha(String senhaAntiga,String novaSenha, String email)
+	public void novaSenha(String senhaAntiga,String novaSenha, String email, Usuario usuario)
 			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException, SenhaTrocadaRecentementeException {
-		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String email_token = currentUser.getName();
-		
-		
-		Usuario usuario = usuarioRepository.findByEmail(email_token);
+
 		validacoesNovaSenha(senhaAntiga, novaSenha, email, usuario);
 		
 		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
