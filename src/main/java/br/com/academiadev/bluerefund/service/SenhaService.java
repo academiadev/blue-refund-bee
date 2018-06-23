@@ -1,5 +1,7 @@
 package br.com.academiadev.bluerefund.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import javax.mail.MessagingException;
@@ -14,6 +16,7 @@ import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
+import br.com.academiadev.bluerefund.exceptions.SenhaTrocadaRecentementeException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.model.Usuario;
 import br.com.academiadev.bluerefund.repository.UsuarioRepository;
@@ -41,7 +44,7 @@ public class SenhaService {
 	}
 	
 	public void novaSenha(String senhaAntiga,String novaSenha, String email)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException {
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException, SenhaTrocadaRecentementeException {
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 		String email_token = currentUser.getName();
 		
@@ -50,11 +53,12 @@ public class SenhaService {
 		validacoesNovaSenha(senhaAntiga, novaSenha, email, usuario);
 		
 		usuario.setHashSenha(passwordEncoder.encode(novaSenha));
+		usuario.setUltimaTrocaDeSenha(LocalDateTime.now());
 		usuarioRepository.save(usuario);
 	}
 
 	private void validacoesNovaSenha(String senhaAntiga, String novaSenha, String email, Usuario usuario)
-			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException {
+			throws SenhasDiferentesException, EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, EmailInvalidoException, SenhaTrocadaRecentementeException {
 
 		if(!validaSenha(novaSenha)) {
 			throw new SenhaInvalidaException();
@@ -69,6 +73,13 @@ public class SenhaService {
 		}
 		if(!passwordEncoder.matches(senhaAntiga, usuario.getHashSenha())) {
 			throw new SenhaIncorretaException();
+		}
+		if(usuario.getUltimaTrocaDeSenha() != null) {
+			Duration duration = Duration.between(usuario.getUltimaTrocaDeSenha(), LocalDateTime.now());
+			if(duration.toHours() < 1) {
+				throw new SenhaTrocadaRecentementeException();
+			}
+				
 		}
 	}
 	

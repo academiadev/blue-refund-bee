@@ -23,6 +23,7 @@ import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaIncorretaException;
 import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
+import br.com.academiadev.bluerefund.exceptions.SenhaTrocadaRecentementeException;
 import br.com.academiadev.bluerefund.exceptions.SenhasDiferentesException;
 import br.com.academiadev.bluerefund.service.AdminService;
 import br.com.academiadev.bluerefund.service.CadastroService;
@@ -56,7 +57,7 @@ public class UsuarioController {
 	@ApiOperation(value = "Troca a senha do usuário")
 	@PostMapping("/novasenha")
 	public void novaSenha(@RequestBody NovaSenhaDTO dto)
-			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException, EmailInvalidoException {
+			throws EmailNaoEncontradoException, SenhaIncorretaException, SenhaInvalidaException, SenhasDiferentesException, EmailInvalidoException, SenhaTrocadaRecentementeException {
 		senhaService.novaSenha(dto.getSenhaAntiga(), dto.getNovaSenha(), dto.getEmail());
 	}
 	
