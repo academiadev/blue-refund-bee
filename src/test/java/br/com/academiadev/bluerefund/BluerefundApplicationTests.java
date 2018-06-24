@@ -2,23 +2,16 @@ package br.com.academiadev.bluerefund;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.academiadev.bluerefund.controller.UsuarioController;
-import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
-import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
-import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
-import br.com.academiadev.bluerefund.exceptions.SenhaInvalidaException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BluerefundApplicationTests {
 	
-	@Autowired
-	private UsuarioController usuarioController;
+	
 	
 
 //	@Test
