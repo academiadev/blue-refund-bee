@@ -4,6 +4,8 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,7 +87,7 @@ public class UsuarioController {
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
 	})
 	@ApiOperation(value = "Exclui um usuário")
-	@PostMapping("/excluir")
+	@DeleteMapping("/excluir")
 	public void exclui(@RequestBody LoginDTO loginDTO) throws EmailInvalidoException, SenhaIncorretaException  {
 		cadastroService.excluiCadastro(loginDTO);
 	}
@@ -94,7 +96,7 @@ public class UsuarioController {
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
 	})
 	@ApiOperation(value = "Busca dados do usuário")
-	@PostMapping("/dadosUsuario")
+	@GetMapping("/dadosUsuario")
 	public UsuarioDTO dadosUsuario(){
 		return usuarioService.dadosUsuario();
 	}
@@ -104,7 +106,7 @@ public class UsuarioController {
 	})
 	@ApiOperation(value = "Busca dados da empresa referente ao admin")
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/dadosEmpresaAdmin")
+	@GetMapping("/dadosEmpresaAdmin")
 	public EmpresaDTO dadosEmpresaAdmin(){
 		return empresaService.dadosEmpresa();
 	}
@@ -113,7 +115,7 @@ public class UsuarioController {
 		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
 	})
 	@ApiOperation(value = "Retorna a role do usuário")
-	@PostMapping("/role")
+	@GetMapping("/role")
 	public RoleDTO role() {
 		return usuarioService.roleUsuario();
 	}
