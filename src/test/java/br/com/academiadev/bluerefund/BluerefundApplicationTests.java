@@ -2,10 +2,6 @@ package br.com.academiadev.bluerefund;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -16,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,10 +20,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import br.com.academiadev.bluerefund.Util.InstanciasParaTestes;
+import br.com.academiadev.bluerefund.controller.AutenticacaoController;
 import br.com.academiadev.bluerefund.controller.UsuarioController;
 import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
+import br.com.academiadev.bluerefund.dto.RoleDTO;
+import br.com.academiadev.bluerefund.dto.TokenDTO;
 import br.com.academiadev.bluerefund.exceptions.CodigosInconsistentesException;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
@@ -55,7 +60,13 @@ public class BluerefundApplicationTests {
 	private EmpresaRepository empresaRepository;
 	
 	@Autowired
+	private AutenticacaoController autenticacaoController;
+	
+	@Autowired
 	private MockMvc mockMvc;
+	
+	private String currentToken;
+	
 	
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
@@ -71,7 +82,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("emailErrado");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("senha_admin1");
 		
 		try {
@@ -89,7 +100,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("senhaErrada");
 		
 		try {
@@ -107,7 +118,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("minha_senha1");
 		usuarioController.adminEEmpresa(dto);
 	}
@@ -117,7 +128,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("minha_senha1");
 		
 		try {
@@ -134,7 +145,7 @@ public class BluerefundApplicationTests {
 	public void T5cadastraPorCodigoEmpresaNaoEncontrada() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(0);
+		dto.setEmpresa(0);
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -152,7 +163,7 @@ public class BluerefundApplicationTests {
 	public void T6cadastraPorCodigoSenhaInvalida() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("senhaErrada");
 		
@@ -170,7 +181,7 @@ public class BluerefundApplicationTests {
 	public void T7cadastraPorCodigoEmailJaCadastrado() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("admin1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -188,7 +199,7 @@ public class BluerefundApplicationTests {
 	public void T8cadastraPorCodigo() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -197,15 +208,45 @@ public class BluerefundApplicationTests {
 	
 	
 	@Test
-	public void login() throws IOException, Exception {
+	public void T9loginErrado() throws IOException, Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@domio.com");
+		dto.setSenha("minha_senha1");
+		
+		InstanciasParaTestes inst = new InstanciasParaTestes();
+		try {
+			autenticacaoController.login(dto, inst.http, inst.device).getBody();
+		}catch (BadCredentialsException e) {
+			Assert.assertTrue(true);
+			return;
+		}
+		Assert.assertTrue(false);
+	}
+	
+	@Test
+	public void T10login() throws IOException, Exception {
 		LoginDTO dto = new LoginDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setSenha("minha_senha1");
 		
+		InstanciasParaTestes inst = new InstanciasParaTestes();
+
+		TokenDTO retorno = (TokenDTO) autenticacaoController.login(dto, inst.http, inst.device).getBody();
+
+		currentToken = retorno.getAccess_token();
+	}
+	
+	@Test
+	public void T11Role() throws Exception {
 		HttpHeaders httpHeaders = new HttpHeaders();
+		currentToken = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJibHVlcmVmdW5kIiwic3ViIjoiYWRtaW4xQGRvbWluaW8uY29tIiwiYXVkIjoidW5rbm93biIsImlhdCI6MTUyOTg2MTU0OCwiZXhwIjoxNTMyODYxNTQ4fQ.X8AxE0llLKsiDlWPn6UBa5ITqR-yHFHR2njWYfYE4Cg1SDN0V4j2ONSPdywKm4i2Lp02pPELfmPEnJF9t6boNQ";
+		httpHeaders.add("Authorization", "Bearer "+ currentToken);
 		
-		ResultActions result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders).content(convertObjectToJsonBytes(dto)));
-		result.andExpect(status().isOk());
+		RoleDTO retorno = usuarioController.role();
+		retorno.getRole();
+		
+		ResultActions result = mockMvc.perform(post("/usuario/rolea").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
+		
 	}
 	
 	

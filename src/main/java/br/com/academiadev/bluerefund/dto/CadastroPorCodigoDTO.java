@@ -5,7 +5,8 @@ public class CadastroPorCodigoDTO {
 	private String nome;
 	private String email;
 	private String senha;
-	private Integer codigoEmpresa;
+	private Integer empresa;
+	
 	public String getNome() {
 		return nome;
 	}
@@ -24,11 +25,11 @@ public class CadastroPorCodigoDTO {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	public Integer getCodigoEmpresa() {
-		return codigoEmpresa;
+	public Integer getEmpresa() {
+		return empresa;
 	}
-	public void setCodigoEmpresa(Integer codigoEmpresa) {
-		this.codigoEmpresa = codigoEmpresa;
+	public void setEmpresa(Integer codigoEmpresa) {
+		this.empresa = codigoEmpresa;
 	}
 	
 	
