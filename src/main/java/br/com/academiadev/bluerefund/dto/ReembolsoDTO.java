@@ -6,11 +6,11 @@ public class ReembolsoDTO {
 	
 	@ApiModelProperty(value = "Id do reembolso", example = "25")
 	private Integer id;
-	@ApiModelProperty(value = "Nome do reembolso", example = "AlmoÁo Garten")
+	@ApiModelProperty(value = "Nome do reembolso", example = "Almo√ßo Garten")
 	private String nome;
 	@ApiModelProperty(value = "Data do reembolso", example = "10/11/1995")
 	private String data;
-	@ApiModelProperty(value = "Categoria do reembolso", example = "AlimentaÁ„o")
+	@ApiModelProperty(value = "Categoria do reembolso", example = "Alimenta√ß√£o")
 	private String categoria;
 	@ApiModelProperty(value = "Status do reembolso", example = "Aprovado")
 	private String status;
@@ -20,7 +20,7 @@ public class ReembolsoDTO {
 	private float valorReembolsado;
 	@ApiModelProperty(value = "Url do arquivo", example = "server\\imagem.jpg")
 	private String urlupload;
-	@ApiModelProperty(value = "E-mail do usu·rio", example = "joaogabriel@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usu√°rio", example = "joaogabriel@contaazul.com")
 	private String emailEmpregado;
 	
 	public Integer getId() {

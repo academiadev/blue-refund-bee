@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class RoleDTO {
 	
-	@ApiModelProperty(value = "Role do usu·rio", example = "ROLE_ADMIN")
+	@ApiModelProperty(value = "Role do usu√°rio", example = "ROLE_ADMIN")
 	private String Role;
 
 	public String getRole() {

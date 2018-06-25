@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class CadastroReembolsoDTO {
 	
-	@ApiModelProperty(value = "Nome do reembolso", example = "Almoço Garten")
+	@ApiModelProperty(value = "Nome do reembolso", example = "AlmoÃ§o Garten")
 	private String nome;
-	@ApiModelProperty(value = "Categoria do reembolso", example = "Alimentação")
+	@ApiModelProperty(value = "Categoria do reembolso", example = "AlimentaÃ§Ã£o")
 	private String categoria;
 	@ApiModelProperty(value = "Valor solicitado", example = "25.50")
 	private float valorSolicitado;

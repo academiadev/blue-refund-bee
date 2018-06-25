@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class LoginDTO {
 
-	@ApiModelProperty(value = "E-mail do usu·rio", example = "joaodasilva@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usu√°rio", example = "joaodasilva@contaazul.com")
 	private String email;
-	@ApiModelProperty(value = "Senha do usu·rio", example = "senh4_secreta")
+	@ApiModelProperty(value = "Senha do usu√°rio", example = "senh4_secreta")
 	private String senha;
 	
 	public String getEmail() {

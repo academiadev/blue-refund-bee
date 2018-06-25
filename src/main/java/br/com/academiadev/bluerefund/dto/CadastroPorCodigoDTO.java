@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class CadastroPorCodigoDTO {
 	
-	@ApiModelProperty(value = "Nome do usuário", example = "João Gabriel")
+	@ApiModelProperty(value = "Nome do usuÃ¡rio", example = "JoÃ£o Gabriel")
 	private String nome;
-	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usuÃ¡rio", example = "joaogabriel@contaazul.com")
 	private String email;
-	@ApiModelProperty(value = "Senha do usuário", example = "senh4_secreta")
+	@ApiModelProperty(value = "Senha do usuÃ¡rio", example = "senh4_secreta")
 	private String senha;
-	@ApiModelProperty(value = "Código da empresa", example = "99999999")
+	@ApiModelProperty(value = "CÃ³digo da empresa", example = "99999999")
 	private Integer empresa;
 	
 	public String getNome() {

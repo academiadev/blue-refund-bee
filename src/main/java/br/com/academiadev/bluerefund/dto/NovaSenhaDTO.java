@@ -4,11 +4,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class NovaSenhaDTO {
 
-	@ApiModelProperty(value = "Senha do usu·rio", example = "senh4_secreta")
+	@ApiModelProperty(value = "Senha do usu√°rio", example = "senh4_secreta")
 	private String senhaAntiga;
-	@ApiModelProperty(value = "Senha do usu·rio", example = "nov4_senha")
+	@ApiModelProperty(value = "Senha do usu√°rio", example = "nov4_senha")
 	private String novaSenha;
-	@ApiModelProperty(value = "E-mail do usu·rio", example = "joaodasilva@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usu√°rio", example = "joaodasilva@contaazul.com")
 	private String email;
 	
 	public String getSenhaAntiga() {

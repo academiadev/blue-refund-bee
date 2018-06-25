@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class TokenDTO {
 
-	@ApiModelProperty(value = "Token do usu·rio", example = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJibHVlcmVmdW5kIiwic3ViIjoiYWRtaW4xQGRvbWluaW8uY29tIiwiYXVkIjoidW5rbm93biIsImlhdCI6MTUyOTg2MTU0OCwiZXhwIjoxNTMyODYxNTQ4fQ.X8AxE0llLKsiDlWPn6UBa5ITqR-yHFHR2njWYfYE4Cg1SDN0V4j2ONSPdywKm4i2Lp02pPELfmPEnJF9t6boNQ")
+	@ApiModelProperty(value = "Token do usu√°rio", example = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJibHVlcmVmdW5kIiwic3ViIjoiYWRtaW4xQGRvbWluaW8uY29tIiwiYXVkIjoidW5rbm93biIsImlhdCI6MTUyOTg2MTU0OCwiZXhwIjoxNTMyODYxNTQ4fQ.X8AxE0llLKsiDlWPn6UBa5ITqR-yHFHR2njWYfYE4Cg1SDN0V4j2ONSPdywKm4i2Lp02pPELfmPEnJF9t6boNQ")
 	private String access_token;
-	@ApiModelProperty(value = "Tempo de expiraÁ„o do token", example = "3000")
+	@ApiModelProperty(value = "Tempo de expira√ß√£o do token", example = "3000")
 	private Long expires_in;
 	
 	public TokenDTO() {

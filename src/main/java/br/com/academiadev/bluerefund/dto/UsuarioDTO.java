@@ -4,11 +4,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UsuarioDTO {
 	
-	@ApiModelProperty(value = "Id do usuário", example = "10")
+	@ApiModelProperty(value = "Id do usuÃ¡rio", example = "10")
 	private Long id;
-	@ApiModelProperty(value = "Nome do usuário", example = "João Gabriel")
+	@ApiModelProperty(value = "Nome do usuÃ¡rio", example = "JoÃ¡o Gabriel")
 	private String nome;
-	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usuÃ¡rio", example = "joaogabriel@contaazul.com")
 	private String email;	
 	
 	public Long getId() {

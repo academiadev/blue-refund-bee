@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class RecuperaSenhaDTO {
 
-	@ApiModelProperty(value = "E-mail do usu·rio", example = "joaodasilva@contaazul.com")
+	@ApiModelProperty(value = "E-mail do usu√°rio", example = "joaodasilva@contaazul.com")
 	String email;
 
 	public String getEmail() {

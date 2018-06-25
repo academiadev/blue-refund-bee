@@ -8,9 +8,9 @@ public class EmpresaDTO {
 	private Long id;
 	@ApiModelProperty(value = "Nome da empresa", example = "ContaAzul")
 	private String nome;
-	@ApiModelProperty(value = "Código para cadastrar empregados da empresa", example = "99999999")
+	@ApiModelProperty(value = "CÃ³digo para cadastrar empregado da empresa", example = "99999999")
 	private Integer codEmpregado;
-	@ApiModelProperty(value = "Código para cadastrar admin da empresa", example = "-99999999")
+	@ApiModelProperty(value = "CÃ³digo para cadastrar admin da empresa", example = "-99999999")
 	private Integer codAdmin;
 	
 	
