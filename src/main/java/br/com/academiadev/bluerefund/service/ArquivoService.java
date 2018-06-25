@@ -17,7 +17,7 @@ import br.com.academiadev.bluerefund.dto.ArquivoDTO;
 @Service
 public class ArquivoService {
 
-	private static String UPLOADED_FOLDER = "c://uploads//";
+	private static String UPLOADED_FOLDER = "src//main//resources";
 	private final Path rootLocation = Paths.get("");
 
 	public ArquivoDTO upload(MultipartFile file, RedirectAttributes redirectAttributes){
