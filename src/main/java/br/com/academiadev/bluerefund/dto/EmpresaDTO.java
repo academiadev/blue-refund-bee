@@ -1,10 +1,16 @@
 package br.com.academiadev.bluerefund.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class EmpresaDTO {
 
+	@ApiModelProperty(value = "Id da empresa", example = "20")
 	private Long id;
+	@ApiModelProperty(value = "Nome da empresa", example = "ContaAzul")
 	private String nome;
+	@ApiModelProperty(value = "Código para cadastrar empregados da empresa", example = "99999999")
 	private Integer codEmpregado;
+	@ApiModelProperty(value = "Código para cadastrar admin da empresa", example = "-99999999")
 	private Integer codAdmin;
 	
 	

@@ -1,9 +1,14 @@
 package br.com.academiadev.bluerefund.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class NovaSenhaDTO {
 
+	@ApiModelProperty(value = "Senha do usuário", example = "senh4_secreta")
 	private String senhaAntiga;
+	@ApiModelProperty(value = "Senha do usuário", example = "nov4_senha")
 	private String novaSenha;
+	@ApiModelProperty(value = "E-mail do usuário", example = "joaodasilva@contaazul.com")
 	private String email;
 	
 	public String getSenhaAntiga() {

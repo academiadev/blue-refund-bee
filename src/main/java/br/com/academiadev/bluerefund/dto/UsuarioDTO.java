@@ -1,9 +1,14 @@
 package br.com.academiadev.bluerefund.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UsuarioDTO {
 	
+	@ApiModelProperty(value = "Id do usuário", example = "10")
 	private Long id;
+	@ApiModelProperty(value = "Nome do usuário", example = "João Gabriel")
 	private String nome;
+	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
 	private String email;	
 	
 	public Long getId() {

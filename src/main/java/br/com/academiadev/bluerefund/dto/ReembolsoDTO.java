@@ -1,15 +1,26 @@
 package br.com.academiadev.bluerefund.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ReembolsoDTO {
 	
+	@ApiModelProperty(value = "Id do reembolso", example = "25")
 	private Integer id;
+	@ApiModelProperty(value = "Nome do reembolso", example = "Almoço Garten")
 	private String nome;
+	@ApiModelProperty(value = "Data do reembolso", example = "10/11/1995")
 	private String data;
+	@ApiModelProperty(value = "Categoria do reembolso", example = "Alimentação")
 	private String categoria;
+	@ApiModelProperty(value = "Status do reembolso", example = "Aprovado")
 	private String status;
+	@ApiModelProperty(value = "Valor Solicitado pelo empregado", example = "25.50")
 	private float valorSolicitado;
+	@ApiModelProperty(value = "Valor reembolsado pelo admin", example = "20.00")
 	private float valorReembolsado;
+	@ApiModelProperty(value = "Url do arquivo", example = "server\\imagem.jpg")
 	private String urlupload;
+	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
 	private String emailEmpregado;
 	
 	public Integer getId() {

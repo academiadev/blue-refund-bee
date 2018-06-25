@@ -1,7 +1,10 @@
 package br.com.academiadev.bluerefund.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class CategoriaDTO {
 
+	@ApiModelProperty(value = "Nome da categoria", example = "Transporte")
 	private String nome;
 
 	public String getNome() {
