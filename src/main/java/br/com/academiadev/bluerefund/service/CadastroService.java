@@ -35,14 +35,14 @@ public class CadastroService {
 	
 	public void cadastroComCodigo(CadastroPorCodigoDTO dto) 
 			throws CodigosInconsistentesException, SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, EmpresaNaoEncontradaException {
-		Empresa empresa1 = empresaRepository.findByCodigo(dto.getCodigoEmpresa());
-		Empresa empresa2 = empresaRepository.findByCodigoAdmin(dto.getCodigoEmpresa());
+		Empresa empresa1 = empresaRepository.findByCodigo(dto.getEmpresa());
+		Empresa empresa2 = empresaRepository.findByCodigoAdmin(dto.getEmpresa());
 		
 		if(empresa1 != null && empresa2 != null) 
 			throw new CodigosInconsistentesException();
 		
 		if(empresa1 != null && empresa2 == null) {
-			empregadoService.cadastrar(dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getCodigoEmpresa());
+			empregadoService.cadastrar(dto.getNome(), dto.getEmail(), dto.getSenha(), dto.getEmpresa());
 			return;
 		}
 		

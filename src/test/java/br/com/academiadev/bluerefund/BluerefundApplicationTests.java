@@ -82,7 +82,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("emailErrado");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("senha_admin1");
 		
 		try {
@@ -100,7 +100,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("senhaErrada");
 		
 		try {
@@ -118,7 +118,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("minha_senha1");
 		usuarioController.adminEEmpresa(dto);
 	}
@@ -128,7 +128,7 @@ public class BluerefundApplicationTests {
 		CadastroAdminDTO dto = new CadastroAdminDTO();
 		dto.setEmail("admin1@dominio.com");
 		dto.setNome("Admin1");
-		dto.setNomeEmpresa("Empresa1");
+		dto.setEmpresa("Empresa1");
 		dto.setSenha("minha_senha1");
 		
 		try {
@@ -145,7 +145,7 @@ public class BluerefundApplicationTests {
 	public void T5cadastraPorCodigoEmpresaNaoEncontrada() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(0);
+		dto.setEmpresa(0);
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -163,7 +163,7 @@ public class BluerefundApplicationTests {
 	public void T6cadastraPorCodigoSenhaInvalida() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("senhaErrada");
 		
@@ -181,7 +181,7 @@ public class BluerefundApplicationTests {
 	public void T7cadastraPorCodigoEmailJaCadastrado() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("admin1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -199,7 +199,7 @@ public class BluerefundApplicationTests {
 	public void T8cadastraPorCodigo() throws SenhaInvalidaException, EmailInvalidoException, EmailJaCadastradoException, CodigosInconsistentesException, EmpresaNaoEncontradaException {
 		CadastroPorCodigoDTO dto = new CadastroPorCodigoDTO();
 		dto.setEmail("empregado1@dominio.com");
-		dto.setCodigoEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
+		dto.setEmpresa(empresaRepository.findByNome("Empresa1").getCodigo());
 		dto.setNome("empregado1");
 		dto.setSenha("minha_senha1");
 		
@@ -246,7 +246,6 @@ public class BluerefundApplicationTests {
 		retorno.getRole();
 		
 		ResultActions result = mockMvc.perform(post("/usuario/rolea").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
-		result.andExpect(jsonPath));
 		
 	}
 	

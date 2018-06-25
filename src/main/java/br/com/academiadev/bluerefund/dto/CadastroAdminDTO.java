@@ -5,7 +5,7 @@ public class CadastroAdminDTO {
 	private String nome;
 	private String email;
 	private String senha;
-	private String nomeEmpresa;
+	private String empresa;
 
 	public String getNome() {
 		return nome;
@@ -31,12 +31,12 @@ public class CadastroAdminDTO {
 		this.senha = senha;
 	}
 
-	public String getNomeEmpresa() {
-		return nomeEmpresa;
+	public String getEmpresa() {
+		return empresa;
 	}
 
-	public void setNomeEmpresa(String nomeEmpresa) {
-		this.nomeEmpresa = nomeEmpresa;
+	public void setEmpresa(String nomeEmpresa) {
+		this.empresa = nomeEmpresa;
 	}
 
 }
