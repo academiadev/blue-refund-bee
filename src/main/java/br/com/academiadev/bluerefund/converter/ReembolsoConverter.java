@@ -31,7 +31,7 @@ public class ReembolsoConverter implements Converter<Reembolso, ReembolsoDTO> {
 		
 		dto.setValorSolicitado(entity.getValorSolicitado().floatValue());
 		dto.setValorReembolsado(entity.getValorReembolsado().floatValue());
-		dto.setUrlupload(entity.getUrlUpload());
+		dto.setUploadUrl(entity.getUrlUpload());
 		dto.setEmailEmpregado(entity.getEmpregado().getEmail());
 		
 		return dto;
