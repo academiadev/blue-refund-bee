@@ -19,7 +19,7 @@ public class ReembolsoDTO {
 	@ApiModelProperty(value = "Valor reembolsado pelo admin", example = "20.00")
 	private float valorReembolsado;
 	@ApiModelProperty(value = "Url do arquivo", example = "server\\imagem.jpg")
-	private String urlupload;
+	private String uploadUrl;
 	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
 	private String emailEmpregado;
 	
@@ -65,11 +65,11 @@ public class ReembolsoDTO {
 	public void setValorReembolsado(float valorReembolsado) {
 		this.valorReembolsado = valorReembolsado;
 	}
-	public String getUrlupload() {
-		return urlupload;
+	public String getUploadUrl() {
+		return uploadUrl;
 	}
-	public void setUrlupload(String urlupload) {
-		this.urlupload = urlupload;
+	public void setUploadUrl(String urlupload) {
+		this.uploadUrl = urlupload;
 	}
 	public String getEmailEmpregado() {
 		return emailEmpregado;
