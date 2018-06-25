@@ -45,7 +45,6 @@ public class ArquivoService {
 	}
 	
 	public Resource download(ArquivoDTO dto) {
-		dto.setUrl("src/main/resources/877c1747-e9cf-4d03-84e7-56762887a861.jpg");
 		try {
 			Path file = rootLocation.resolve(dto.getUrl());
 			Resource resource = new UrlResource(file.toUri());
