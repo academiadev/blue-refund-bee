@@ -51,7 +51,7 @@ public class ReembolsoService {
 
 		validacoesAdiciona(categoria, usuario);
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
 		
 		Reembolso reembolso = new Reembolso(dto.getNome(),categoria , new BigDecimal(dto.getValorSolicitado()),
 				dto.getUploadUrl(), usuario, LocalDate.parse(dto.getData(), formatter));
