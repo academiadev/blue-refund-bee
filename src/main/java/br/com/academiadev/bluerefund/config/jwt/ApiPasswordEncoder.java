@@ -1,6 +1,7 @@
 package br.com.academiadev.bluerefund.config.jwt;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class ApiPasswordEncoder implements PasswordEncoder {
 		super();
 	}
 
-	public ApiPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+	public ApiPasswordEncoder(@Lazy BCryptPasswordEncoder passwordEncoder) {
 		super();
 		this.passwordEncoder = passwordEncoder;
 	}
