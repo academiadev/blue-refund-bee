@@ -66,8 +66,13 @@ public class BluerefundApplicationTests {
 	/*
 	 * Para estes testes funcionarem corretamente é necessário que:
 	 * - O banco tenha somente:
-	 * INSERT INTO AUTORIZACAO (id, nome) VALUES (1, 'ROLE_USER');
-	 * INSERT INTO AUTORIZACAO (id, nome) VALUES (2, 'ROLE_ADMIN');
+		delete from usuario_autorizacao;
+		delete from reembolso;
+		delete from usuario;
+		delete from empresa;
+		delete from categoria;
+		INSERT INTO AUTORIZACAO (id, nome) VALUES (1, 'ROLE_USER');
+	  	INSERT INTO AUTORIZACAO (id, nome) VALUES (2, 'ROLE_ADMIN');
 	 * - Os testes sejam executados em ordem
 	 */
 	

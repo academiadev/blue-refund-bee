@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,18 @@ public class ReembolsoService {
 			throw new EmailNaoEncontradoException("E-mail não encontrado");
 			
 		List<Reembolso> reembolsos = reembolsoRepository.findByUsuario(usuario);
+		
+		Collections.sort(reembolsos, new Comparator<Reembolso>() {
+			@Override
+			public int compare(Reembolso o1, Reembolso o2) {
+				if(o1.getStatus().compareTo(o2.getStatus()) == -1)
+					return 1;
+				if(o1.getStatus().compareTo(o2.getStatus()) == 1)
+					return -1;
+				return 0;
+			}
+		});
+		
 		List<ReembolsoDTO> dtos = new ArrayList<>();
 		
 		for (Reembolso reembolso : reembolsos) {
@@ -137,6 +151,17 @@ public class ReembolsoService {
 		for (Usuario usuario : usuarios) {
 			reembolsos.addAll(reembolsoRepository.findByUsuario(usuario));
 		}
+		
+		Collections.sort(reembolsos, new Comparator<Reembolso>() {
+			@Override
+			public int compare(Reembolso o1, Reembolso o2) {
+				if(o1.getStatus().compareTo(o2.getStatus()) == -1)
+					return 1;
+				if(o1.getStatus().compareTo(o2.getStatus()) == 1)
+					return -1;
+				return 0;
+			}
+		});
 
 		List<ReembolsoDTO> dtos = new ArrayList<>();
 		
