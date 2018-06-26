@@ -2,7 +2,7 @@ package br.com.academiadev.bluerefund.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ReembolsoDTO {
+public class EditaReembolsoDTO {
 	
 	@ApiModelProperty(value = "Id do reembolso", example = "25")
 	private Integer id;
@@ -12,17 +12,10 @@ public class ReembolsoDTO {
 	private String data;
 	@ApiModelProperty(value = "Categoria do reembolso", example = "Alimentação")
 	private String categoria;
-	@ApiModelProperty(value = "Status do reembolso", example = "Aprovado")
-	private String status;
 	@ApiModelProperty(value = "Valor Solicitado pelo empregado", example = "25.50")
 	private float valorSolicitado;
-	@ApiModelProperty(value = "Valor reembolsado pelo admin", example = "20.00")
-	private float valorReembolsado;
 	@ApiModelProperty(value = "Url do arquivo", example = "server\\imagem.jpg")
 	private String uploadUrl;
-	@ApiModelProperty(value = "E-mail do usuário", example = "joaogabriel@contaazul.com")
-	private String emailEmpregado;
-	
 	public Integer getId() {
 		return id;
 	}
@@ -47,37 +40,19 @@ public class ReembolsoDTO {
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
 	public float getValorSolicitado() {
 		return valorSolicitado;
 	}
 	public void setValorSolicitado(float valorSolicitado) {
 		this.valorSolicitado = valorSolicitado;
 	}
-	public float getValorReembolsado() {
-		return valorReembolsado;
-	}
-	public void setValorReembolsado(float valorReembolsado) {
-		this.valorReembolsado = valorReembolsado;
-	}
 	public String getUploadUrl() {
 		return uploadUrl;
 	}
-	public void setUploadUrl(String urlupload) {
-		this.uploadUrl = urlupload;
-	}
-	public String getEmailEmpregado() {
-		return emailEmpregado;
-	}
-	public void setEmailEmpregado(String emailEmpregado) {
-		this.emailEmpregado = emailEmpregado;
+	public void setUploadUrl(String uploadUrl) {
+		this.uploadUrl = uploadUrl;
 	}
 	
 	
-	
+
 }

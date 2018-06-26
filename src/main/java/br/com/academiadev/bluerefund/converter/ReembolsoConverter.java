@@ -12,7 +12,7 @@ public class ReembolsoConverter implements Converter<Reembolso, ReembolsoDTO> {
 		
 		dto.setId((int) (long) entity.getId());
 		dto.setNome(entity.getNome());
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		dto.setData(entity.getData().format(formatter).toString());
 		dto.setCategoria(entity.getCategoria().getNome());
 		switch(entity.getStatus()) {

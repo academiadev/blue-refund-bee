@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.academiadev.bluerefund.dto.AprovaReembolsoDTO;
 import br.com.academiadev.bluerefund.dto.CadastroReembolsoDTO;
+import br.com.academiadev.bluerefund.dto.EditaReembolsoDTO;
 import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
+import br.com.academiadev.bluerefund.exceptions.ReembolsoJaAvaliadoException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.service.ReembolsoService;
@@ -96,5 +98,15 @@ public class ReembolsoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void aprova(@RequestBody AprovaReembolsoDTO dto) throws ReembolsoNaoEncontradoException, ValorInvalidoException {
 		reembolsoService.aprova((long) dto.getId(), new BigDecimal(dto.getValorReembolsado()));
+	}
+	
+	@ApiImplicitParams({ //
+		@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header") //
+	})
+	@PostMapping("/edita")
+	@PreAuthorize("hasRole('USER')")
+	@ApiOperation("Edita os dados do reembolso")
+	public void edita(@RequestBody EditaReembolsoDTO dto) throws CategoriaNaoCadastradaException, EmpregadoNaoEncontradoException, ReembolsoJaAvaliadoException   {
+		reembolsoService.edita(dto);
 	}
 }

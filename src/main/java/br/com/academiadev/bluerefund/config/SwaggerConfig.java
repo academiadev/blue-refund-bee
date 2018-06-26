@@ -26,7 +26,7 @@ public class SwaggerConfig {
 	private ApiInfo apiInfo() {
 		String titulo = "BlueRefund - Bee Squad";
 		String descricao = "Sistema para controle de reembolso.";
-		return new ApiInfo(titulo, descricao, "versão", "termos", null, "Licence", "licenseUrl", new ArrayList<>());
+		return new ApiInfo(titulo, descricao, "beta 1.0", "termos", null, "reembolsoazul.netlify.com", "reembolsoazul.netlify.com", new ArrayList<>());
 	}
 
 }

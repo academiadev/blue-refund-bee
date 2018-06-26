@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 import br.com.academiadev.bluerefund.converter.ReembolsoConverter;
 import br.com.academiadev.bluerefund.dto.CadastroReembolsoDTO;
+import br.com.academiadev.bluerefund.dto.EditaReembolsoDTO;
 import br.com.academiadev.bluerefund.dto.ReembolsoDTO;
 import br.com.academiadev.bluerefund.exceptions.CategoriaNaoCadastradaException;
 import br.com.academiadev.bluerefund.exceptions.EmailNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpregadoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.EmpresaNaoEncontradaException;
+import br.com.academiadev.bluerefund.exceptions.ReembolsoJaAvaliadoException;
 import br.com.academiadev.bluerefund.exceptions.ReembolsoNaoEncontradoException;
 import br.com.academiadev.bluerefund.exceptions.ValorInvalidoException;
 import br.com.academiadev.bluerefund.model.Categoria;
@@ -169,6 +171,32 @@ public class ReembolsoService {
 			dtos.add(new ReembolsoConverter().toDTO(reembolso));
 		}
 		return dtos;
+	}
+	
+	public void edita(EditaReembolsoDTO dto) throws CategoriaNaoCadastradaException, EmpregadoNaoEncontradoException, ReembolsoJaAvaliadoException {
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		String email_token = currentUser.getName();
+		Usuario usuario = usuarioRepository.findByEmail(email_token);
+		
+
+		Categoria categoria = categoriaRepository.findByNome(dto.getCategoria());
+
+		validacoesAdiciona(categoria, usuario);
+		
+		Reembolso reembolso = reembolsoRepository.findById(dto.getId().longValue());
+		
+		if(!reembolso.getStatus().equals(StatusReembolso.AGUARDANDO))
+			throw new ReembolsoJaAvaliadoException("O seu rembolso já foi avaliado e não pode ser editado");
+			
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		reembolso.setNome(dto.getNome());
+		reembolso.setCategoria(categoria);
+		reembolso.setValorSolicitado(new BigDecimal(dto.getValorSolicitado()));
+		reembolso.setUrlUpload(dto.getUploadUrl());
+		reembolso.setData(LocalDate.parse(dto.getData(), formatter));
+		
+		reembolsoRepository.save(reembolso);
 	}
 	
 	
