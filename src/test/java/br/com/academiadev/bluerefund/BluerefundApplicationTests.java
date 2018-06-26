@@ -41,6 +41,8 @@ import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.dto.CadastroReembolsoDTO;
 import br.com.academiadev.bluerefund.dto.CategoriaDTO;
 import br.com.academiadev.bluerefund.dto.LoginDTO;
+import br.com.academiadev.bluerefund.dto.NovaSenhaDTO;
+import br.com.academiadev.bluerefund.dto.RecuperaSenhaDTO;
 import br.com.academiadev.bluerefund.dto.TokenDTO;
 import br.com.academiadev.bluerefund.exceptions.CodigosInconsistentesException;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
@@ -684,6 +686,106 @@ public class BluerefundApplicationTests {
 		ResultActions resultAction = mockMvc.perform(delete("/reembolso/exclui").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(Integer.parseInt(jsonObj.getString("id")))).headers(httpHeaders));
 		resultAction.andExpect(status().isOk());		
 	}
+	
+	@Test
+	public void C8NovaSenha() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		NovaSenhaDTO dtoSenha = new NovaSenhaDTO();
+		dtoSenha.setEmail("empregado1@dominio.com");
+		dtoSenha.setNovaSenha("nova_senha1");
+		dtoSenha.setSenhaAntiga("minha_senha1");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/novasenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dtoSenha)).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void C8NovaSenhaTrocadaRecentement() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("nova_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		NovaSenhaDTO dtoSenha = new NovaSenhaDTO();
+		dtoSenha.setEmail("empregado1@dominio.com");
+		dtoSenha.setNovaSenha("nova_senha1");
+		dtoSenha.setSenhaAntiga("minha_senha1");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/novasenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dtoSenha)).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());		
+	}
+	
+	@Test
+	public void C9NovaSenhaErrada() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("nova_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		NovaSenhaDTO dtoSenha = new NovaSenhaDTO();
+		dtoSenha.setEmail("empregado1@dominio.com");
+		dtoSenha.setNovaSenha("nova_senha1");
+		dtoSenha.setSenhaAntiga("minha_senha1");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/novasenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dtoSenha)).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());		
+	}
+	
+	@Test
+	public void D0RecuperaSenhaEmailNaoCadastrado() throws IOException, Exception {
+		RecuperaSenhaDTO dto = new RecuperaSenhaDTO();
+		dto.setEmail("empregado1@minio.com");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/recuperaSenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto)));
+		resultAction.andExpect(status().is4xxClientError());
+		
+	}
+	
+	@Test
+	public void D1RecuperaSenhaEmailInvalido() throws IOException, Exception {
+		RecuperaSenhaDTO dto = new RecuperaSenhaDTO();
+		dto.setEmail("empregado.com");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/recuperaSenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto)));
+		resultAction.andExpect(status().is4xxClientError());
+	}
+	
+	@Test
+	public void D2RecuperaSenha() throws IOException, Exception {
+		RecuperaSenhaDTO dto = new RecuperaSenhaDTO();
+		dto.setEmail("empregado1@dominio.com");
+		
+		ResultActions resultAction = mockMvc.perform(post("/usuario/recuperasenha").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto)));
+		resultAction.andExpect(status().isOk());
+		
+	}
+	
+	
 	
 	
 	

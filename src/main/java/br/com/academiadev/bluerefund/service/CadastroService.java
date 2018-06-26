@@ -63,7 +63,8 @@ public class CadastroService {
 		if(!passwordEncoder.matches(dto.getSenha(), usuario.getHashSenha())) {
 			throw new SenhaIncorretaException("Senha incorreta");
 		}
-		
+		usuario.setReembolsos(null);
+		usuarioRepository.save(usuario);
 		usuarioRepository.delete(usuario);
 	}
 	
