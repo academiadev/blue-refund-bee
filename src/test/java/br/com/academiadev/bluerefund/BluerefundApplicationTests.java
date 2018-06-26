@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -29,10 +30,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import br.com.academiadev.bluerefund.Util.InstanciasParaTestes;
 import br.com.academiadev.bluerefund.controller.AutenticacaoController;
 import br.com.academiadev.bluerefund.controller.UsuarioController;
+import br.com.academiadev.bluerefund.dto.AprovaReembolsoDTO;
 import br.com.academiadev.bluerefund.dto.CadastroAdminDTO;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.dto.CadastroReembolsoDTO;
@@ -459,6 +462,231 @@ public class BluerefundApplicationTests {
 		ArrayList<Reembolso> reembolsos = (ArrayList<Reembolso>) reembolsoRepository.findAll();
 		assertTrue(reembolsos.size() == 2);
 	}
+	
+	@Test
+	public void B9BuscaReembolsosEmpregado() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado2@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		ResultActions resultAction = mockMvc.perform(get("/reembolso/buscaPorEmpregado").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());
+		
+	}
+	
+	@Test
+	public void C0BuscaReembolsosEmpregadoSemRole() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		ResultActions resultAction = mockMvc.perform(get("/reembolso/buscaPorEmpregado").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());
+		
+	}
+	
+	@Test
+	public void C0BuscaReembolsosAdmin() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		ResultActions resultAction = mockMvc.perform(get("/reembolso/buscaPorEmpresa").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());
+		
+	}
+	
+	@Test
+	public void C1BuscaReembolsosAdminSemRole() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		ResultActions resultAction = mockMvc.perform(get("/reembolso/buscaPorEmpresa").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());
+		
+	}
+	
+	@Test
+	public void C2AprovaReembolso() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpresa").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(0);
+		
+		AprovaReembolsoDTO dtoAprova = new AprovaReembolsoDTO();
+		dtoAprova.setId(Integer.parseInt(jsonObj.getString("id")));
+		dtoAprova.setValorReembolsado(Float.parseFloat(jsonObj.getString("valorReembolsado")));
+		
+		ResultActions resultAction = mockMvc.perform(post("/reembolso/aprova").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dtoAprova)).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void C3ReprovaReembolso() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpresa").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(1);
+		
+		ResultActions resultAction = mockMvc.perform(post("/reembolso/reprova").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(Integer.parseInt(jsonObj.getString("id")))).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void C4ReprovaReembolsoSemROle() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpregado").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(0);
+		
+		ResultActions resultAction = mockMvc.perform(post("/reembolso/reprova").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(Integer.parseInt(jsonObj.getString("id")))).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());		
+	}
+	
+	@Test
+	public void C5AprovaReembolsoSemRole() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpregado").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(0);
+		
+		AprovaReembolsoDTO dtoAprova = new AprovaReembolsoDTO();
+		dtoAprova.setId(Integer.parseInt(jsonObj.getString("id")));
+		dtoAprova.setValorReembolsado(Float.parseFloat(jsonObj.getString("valorReembolsado")));
+		
+		ResultActions resultAction = mockMvc.perform(post("/reembolso/aprova").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dtoAprova)).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());		
+	}
+	
+	@Test
+	public void C6ExcluiReembolsoSemRole() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("admin1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpresa").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(0);
+		
+		ResultActions resultAction = mockMvc.perform(post("/reembolso/exclui").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(Integer.parseInt(jsonObj.getString("id")))).headers(httpHeaders));
+		resultAction.andExpect(status().is4xxClientError());		
+	}
+	
+	@Test
+	public void C7ExcluiReembolso() throws Exception {
+		LoginDTO dto = new LoginDTO();
+		dto.setEmail("empregado1@dominio.com");
+		dto.setSenha("minha_senha1");
+		
+		MvcResult result = mockMvc.perform(post("/auth/login").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(dto))).andReturn();
+		String content = result.getResponse().getContentAsString();
+		JSONObject jsonObj = new JSONObject(content);
+		this.currentToken = jsonObj.getString("access_token");
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add("Authorization", "Bearer " + currentToken);
+		
+		result = mockMvc.perform(get("/reembolso/buscaPorEmpregado").contentType(APPLICATION_JSON_UTF8).headers(httpHeaders)).andReturn();
+		content = result.getResponse().getContentAsString();
+		JSONArray jsonarray = new JSONArray(content);
+		jsonObj= (JSONObject) jsonarray.get(0);
+		
+		ResultActions resultAction = mockMvc.perform(delete("/reembolso/exclui").contentType(APPLICATION_JSON_UTF8).content(convertObjectToJsonBytes(Integer.parseInt(jsonObj.getString("id")))).headers(httpHeaders));
+		resultAction.andExpect(status().isOk());		
+	}
+	
+	
+	
 	
 	
 

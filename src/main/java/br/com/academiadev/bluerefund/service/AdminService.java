@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.academiadev.bluerefund.config.jwt.ApiPasswordEncoder;
 import br.com.academiadev.bluerefund.dto.CadastroPorCodigoDTO;
 import br.com.academiadev.bluerefund.exceptions.EmailInvalidoException;
 import br.com.academiadev.bluerefund.exceptions.EmailJaCadastradoException;
@@ -27,7 +27,7 @@ public class AdminService {
 	@Autowired
 	private EmpresaService empresaService;
 	@Autowired
-	private ApiPasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private AutorizacaoRepository autorizacaoRepository;
 	
